@@ -1,3 +1,17 @@
+# XBOX 360 Controller to C64
+
+Try and get a USB 360 contorller to work on the c64
+
+TODO:
+
+- read controller via tinyusb
+- dpad is joystick
+- A is fire
+- Analog stick is POTX/POTY
+- B is UP
+- X and Y are c64gs secondary fire?
+
+
 
 ## prepare
 clone with submodules, e,g,
