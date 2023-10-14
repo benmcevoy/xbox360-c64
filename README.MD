@@ -69,3 +69,11 @@ chmod +x ./build.sh
 ```
 
 
+# wiring
+
+For USB HID power the PICO via VBUS and not VSYS. 
+
+I am able to power from the other pico acting as the pico probe.
+
+
+

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2019 Ha Thach (tinyusb.org)
@@ -35,9 +35,9 @@
 //--------------------------------------------------------------------+
 
 #if CFG_TUSB_MCU == OPT_MCU_RP2040
-// change to 1 if using pico-pio-usb as host controller for raspberry rp2040
-#define CFG_TUH_RPI_PIO_USB   0
-#define BOARD_TUH_RHPORT      CFG_TUH_RPI_PIO_USB
+  // change to 1 if using pico-pio-usb as host controller for raspberry rp2040
+  #define CFG_TUH_RPI_PIO_USB   0
+  #define BOARD_TUH_RHPORT      CFG_TUH_RPI_PIO_USB
 #endif
 
 // RHPort number used for host can be defined by board.mk, default to port 0
@@ -80,12 +80,12 @@
  * - CFG_TUSB_MEM SECTION : __attribute__ (( section(".usb_ram") ))
  * - CFG_TUSB_MEM_ALIGN   : __attribute__ ((aligned(4)))
  */
-#ifndef CFG_TUSB_MEM_SECTION
-#define CFG_TUSB_MEM_SECTION
+#ifndef CFG_TUH_MEM_SECTION
+#define CFG_TUH_MEM_SECTION
 #endif
 
-#ifndef CFG_TUSB_MEM_ALIGN
-#define CFG_TUSB_MEM_ALIGN          __attribute__ ((aligned(4)))
+#ifndef CFG_TUH_MEM_ALIGN
+#define CFG_TUH_MEM_ALIGN        __attribute__ ((aligned(4)))
 #endif
 
 //--------------------------------------------------------------------
@@ -96,13 +96,15 @@
 #define CFG_TUH_ENUMERATION_BUFSIZE 256
 
 #define CFG_TUH_HUB                 1 // number of supported hubs
-#define CFG_TUH_CDC                 1
-#define CFG_TUH_HID                 4 // typical keyboard + mouse device can have 3-4 HID interfaces
+#define CFG_TUH_CDC                 1 // CDC ACM
+#define CFG_TUH_CDC_FTDI            1 // FTDI Serial.  FTDI is not part of CDC class, only to re-use CDC driver API
+#define CFG_TUH_CDC_CP210X          1 // CP210x Serial. CP210X is not part of CDC class, only to re-use CDC driver API
+#define CFG_TUH_HID                 (3*CFG_TUH_DEVICE_MAX) // typical keyboard + mouse device can have 3-4 HID interfaces
 #define CFG_TUH_MSC                 1
 #define CFG_TUH_VENDOR              0
 
-// max device support (excluding hub device)
-#define CFG_TUH_DEVICE_MAX          (CFG_TUH_HUB ? 4 : 1) // hub typically has 4 ports
+// max device support (excluding hub device): 1 hub typically has 4 ports
+#define CFG_TUH_DEVICE_MAX          (3*CFG_TUH_HUB + 1)
 
 //------------- HID -------------//
 #define CFG_TUH_HID_EPIN_BUFSIZE    64

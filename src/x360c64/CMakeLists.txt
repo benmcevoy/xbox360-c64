@@ -1,11 +1,17 @@
 set(projectName "x360c64")
 set(FAMILY rp2040)
 set(BOARD pico_sdk)
-set(TINYUSB_FAMILY_PROJECT_NAME_PREFIX "tinyusb_dev_")
+set(TINYUSB_FAMILY_PROJECT_NAME_PREFIX "tinyusb_host_")
 
-add_executable(${projectName} 
-        hid_app.c 
-        main.c )
+add_executable(${projectName})
+
+target_sources(${projectName} PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}/hid_app.c
+        ${CMAKE_CURRENT_LIST_DIR}/main.c
+        ${CMAKE_CURRENT_LIST_DIR}/msc_app.c
+        ${CMAKE_CURRENT_LIST_DIR}/cdc_app.c
+        )
+
 
 #pico_set_binary_type(${projectName} no_flash)
 
@@ -14,9 +20,9 @@ add_executable(${projectName}
 # target_compile_definitions(${projectName} PRIVATE PICO_FLASH_SPI_CLKDIV=4)
 # #pico_set_boot_stage2(TARGET ${projectName})
 
-# configure UART
-pico_enable_stdio_usb(${projectName} 0)
-pico_enable_stdio_uart(${projectName} 1)
+# # configure UART
+# pico_enable_stdio_usb(${projectName} 0)
+# pico_enable_stdio_uart(${projectName} 1)
 
 # Make sure TinyUSB can find tusb_config.h
 target_include_directories(${projectName} PUBLIC

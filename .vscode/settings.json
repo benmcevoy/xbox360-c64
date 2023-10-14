@@ -3,5 +3,7 @@
         "string.h": "c",
         "board.h": "c",
         "hid_host.h": "c"
-    }
+    },
+    "cmake.configureOnOpen": true,
+    "cmake.sourceDirectory": "/media/ben/DATA/Dev/git/xbox360-c64/src"
 }

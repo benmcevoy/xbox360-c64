@@ -1,4 +1,4 @@
-/*
+/* 
  * The MIT License (MIT)
  *
  * Copyright (c) 2019 Ha Thach (tinyusb.org)
@@ -23,61 +23,61 @@
  *
  */
 
-/* This example current worked and tested with following controller
- * - Sony DualShock 4 [CUH-ZCT2x] VID = 0x054c, PID = 0x09cc
- */
-
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
+#include "pico/stdlib.h"
 #include "bsp/board.h"
 #include "tusb.h"
-#include "tusb_config.h"
 
 //--------------------------------------------------------------------+
 // MACRO CONSTANT TYPEDEF PROTYPES
 //--------------------------------------------------------------------+
 void led_blinking_task(void);
 
-extern void cdc_task(void);
+extern void cdc_app_task(void);
 extern void hid_app_task(void);
 
 /*------------- MAIN -------------*/
 int main(void)
 {
+  stdio_init_all();
   board_init();
 
-  printf("TinyUSB Host HID Controller Example\r\n");
-  printf("Note: Events only displayed for explicit supported controllers\r\n");
+  printf("TinyUSB Host CDC MSC HID Example\r\n");
 
   // init host stack on configured roothub port
   tuh_init(BOARD_TUH_RHPORT);
-
-  // if (board_init_after_tusb) {
-  //   board_init_after_tusb();
-  // }
 
   while (1)
   {
     // tinyusb host task
     tuh_task();
+
     led_blinking_task();
-
-#if CFG_TUH_CDC
-    cdc_task();
-#endif
-
-#if CFG_TUH_HID
+    cdc_app_task();
     hid_app_task();
-#endif
   }
+
+  return 0;
 }
 
 //--------------------------------------------------------------------+
 // TinyUSB Callbacks
 //--------------------------------------------------------------------+
+
+void tuh_mount_cb(uint8_t dev_addr)
+{
+  // application set-up
+  printf("A device with address %d is mounted\r\n", dev_addr);
+}
+
+void tuh_umount_cb(uint8_t dev_addr)
+{
+  // application tear-down
+  printf("A device with address %d is unmounted \r\n", dev_addr);
+}
+
 
 //--------------------------------------------------------------------+
 // Blinking Task
