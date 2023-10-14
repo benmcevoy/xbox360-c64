@@ -10,6 +10,8 @@ TODO:
 - Analog stick is POTX/POTY
 - B is UP
 - X and Y are c64gs secondary fire?
+- PS4 controller?
+- Web interface to configure? see the pico fight stick
 
 
 
