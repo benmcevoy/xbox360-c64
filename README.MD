@@ -7,8 +7,8 @@ TODO:
 - read controller via tinyusb
 - dpad is joystick
 - A is fire
-- Analog stick is POTX/POTY
 - B is UP
+- Analog stick is POTX/POTY
 - X and Y are c64gs secondary fire?
 - PS4 controller?
 - Web interface to configure? see the pico fight stick
@@ -20,7 +20,7 @@ clone with submodules, e,g,
 
 `git clone --recurse-submodules https://github.com/benmcevoy/xbox360-c64`
 
-or
+or you may need to run the below under the pico-sdk folder.
 
 ```
 git submodule init 

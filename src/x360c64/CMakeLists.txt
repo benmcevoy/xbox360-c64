@@ -3,7 +3,9 @@ set(FAMILY rp2040)
 set(BOARD pico_sdk)
 set(TINYUSB_FAMILY_PROJECT_NAME_PREFIX "tinyusb_dev_")
 
-add_executable(${projectName} main.c)
+add_executable(${projectName} 
+        hid_app.c 
+        main.c )
 
 #pico_set_binary_type(${projectName} no_flash)
 
@@ -21,7 +23,13 @@ target_include_directories(${projectName} PUBLIC
         ${CMAKE_CURRENT_LIST_DIR})
 
 # pull in common dependencies
-target_link_libraries(${projectName} PUBLIC pico_stdlib )
+target_link_libraries(${projectName} PUBLIC 
+        pico_stdlib
+        hardware_dma 
+        tinyusb_host 
+        tinyusb_board
+        pico_multicore
+        pico_unique_id )
 
 
 # create map/bin/hex/uf2 file etc.
