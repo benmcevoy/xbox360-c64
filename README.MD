@@ -2,7 +2,7 @@
 ## prepare
 clone with submodules, e,g,
 
-`git clone --recurse-submodules -j8 git://github.com/foo/bar.git`
+`git clone --recurse-submodules https://github.com/benmcevoy/xbox360-c64`
 
 or
 
@@ -11,8 +11,11 @@ git submodule init
 git submodule update
 ```
 
-export environment variables - i use .envrc https://direnv.net/
-or ~/.bashrc or whatever
+export environment variables 
+- i use .envrc https://direnv.net/
+- or use  ~/.bashrc 
+- or whatever
+  
 
 export PICO_SDK_PATH=/path/to/xbox360-c64/pico-sdk
 
