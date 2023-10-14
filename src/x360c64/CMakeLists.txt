@@ -8,21 +8,7 @@ add_executable(${projectName})
 target_sources(${projectName} PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}/hid_app.c
         ${CMAKE_CURRENT_LIST_DIR}/main.c
-        ${CMAKE_CURRENT_LIST_DIR}/msc_app.c
-        ${CMAKE_CURRENT_LIST_DIR}/cdc_app.c
         )
-
-
-#pico_set_binary_type(${projectName} no_flash)
-
-# # allow stable overclock - set SPI flash clock divider - necessary over 300MHz 
-# pico_define_boot_stage2(${projectName} ${PICO_DEFAULT_BOOT_STAGE2_FILE})
-# target_compile_definitions(${projectName} PRIVATE PICO_FLASH_SPI_CLKDIV=4)
-# #pico_set_boot_stage2(TARGET ${projectName})
-
-# # configure UART
-# pico_enable_stdio_usb(${projectName} 0)
-# pico_enable_stdio_uart(${projectName} 1)
 
 # Make sure TinyUSB can find tusb_config.h
 target_include_directories(${projectName} PUBLIC
