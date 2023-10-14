@@ -18,11 +18,12 @@ TODO:
 ## prepare
 clone with submodules, e,g,
 
-`git clone --recurse-submodules https://github.com/benmcevoy/xbox360-c64`
+`git clone --recurse-submodules git://github.com/benmcevoy/xbox360-c64`
 
 or you may need to run the below under the pico-sdk folder.
 
 ```
+cd pico-sdk
 git submodule init 
 git submodule update
 ```
@@ -33,17 +34,18 @@ export environment variables
 - or whatever
   
 
-export PICO_SDK_PATH=/path/to/xbox360-c64/pico-sdk
+`export PICO_SDK_PATH=/path/to/xbox360-c64/pico-sdk`
 
 ## cmake
 ```
-cd src
-mkdir build
-cd build
+cd src\build
 cmake ..
 ```
 
 ## make
+
+or use `./build.sh`
+
 ```
 cd src/build/x360c64
 make -j4
@@ -53,14 +55,17 @@ make -j4
 
 ```
 # make executable
-chmod +x ./swd-deploy.sh
+chmod +x ./deploy.sh
 chmod +x ./monitor.sh
+chmod +x ./build.sh
 ```
 
 ```
 # get the picoprobe uf2 https://github.com/raspberrypi/picoprobe
-# deploy via picoprobe
-./swd-deploy.sh
+# build, then deploy via picoprobe, then start monitoring UART
+./build.sh
+./deploy.sh
+./monitor.sh
 ```
 
 
