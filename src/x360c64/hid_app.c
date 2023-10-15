@@ -10,15 +10,6 @@ void hid_app_init(JoyPort_t *context){
 
 void hid_app_task(void) {}
 
-void debug_report(uint8_t const* report, uint16_t len) {
-    // we have a pointer to a bunch of bytes, len bytes in fact
-    printf("report:\r");
-    for (uint16_t i = 0; i < len; i++) {
-        printf("%u ", *(report + (i * sizeof(uint8_t))));
-    }
-    fflush(stdout);
-}
-
 void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance,
                       uint8_t const* desc_report, uint16_t desc_len) {
     (void)desc_report;

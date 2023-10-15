@@ -1,6 +1,6 @@
 # XBOX 360 Controller to C64
 
-Try and get a USB 360 contorller to work on the c64
+Try and get a USB 360 controller to work on the c64
 
 Oh dear.  I should really rename this repo, as the xbox controller is a pain...
 
@@ -9,15 +9,14 @@ So far can talk to PS4 dualshock and a generic switch controller.
 
 TODO:
 
-- read controller via tinyusb
+DONE - read controller via tinyusb
 - dpad is joystick
 - A is fire
 - B is UP
-- Analog stick is POTX/POTY
-- X and Y are c64gs secondary fire?
-- PS4 controller?
+NOPE - Analog stick is POTX/POTY - yeah maybe not - got no DAC
+- X and Y are c64gs secondary fire? - this I can do
+DONE - PS4 controller? yep
 - Web interface to configure? see the pico fight stick
-
 
 
 ## prepare
@@ -79,3 +78,7 @@ For USB HID power the PICO via VBUS and not VSYS. VBUS needs power so it can pow
 I am able to power from the other pico acting as the pico probe.
 
 It might be possible to power from the 5V line on the C64 joystick port, but I believe it only supplies 100mA?
+
+Currently I have button A (or what I call button A) to GP10
+
+it's pull down, I can make a multimeter go beep when I push the button.

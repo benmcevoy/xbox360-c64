@@ -18,7 +18,7 @@ static inline bool is_sony_ds4(uint16_t vid, uint16_t pid) {
         || (vid == 0x0f0d && pid == 0x005e)                  // Hori FC4
         || (vid == 0x0f0d && pid == 0x00ee)  // Hori PS4 Mini (PS4-099U)
         || (vid == 0x1f4f && pid == 0x1002)  // ASW GG xrd controller
-    );
+        );
 }
 
 static inline bool is_nintendo_pro(uint16_t vid, uint16_t pid) {
@@ -30,6 +30,15 @@ static inline bool is_nintendo_pro(uint16_t vid, uint16_t pid) {
     );
 }
 
+static void debug_report(uint8_t const* report, uint16_t len) {
+    // we have a pointer to a bunch of bytes, len bytes in fact
+    printf("report:\r");
+    for (uint16_t i = 0; i < len; i++) {
+        printf("%u ", *(report + (i * sizeof(uint8_t))));
+    }
+    fflush(stdout);
+}
+
 // identify device
 Device_t x360c64_device_identify(uint16_t vid, uint16_t pid) {
     if (is_nintendo_pro(vid, pid)) return NINTENDO;
@@ -39,7 +48,8 @@ Device_t x360c64_device_identify(uint16_t vid, uint16_t pid) {
 }
 
 // get report in standard/normalized struct
-void x360c64_device_get_report(uint8_t const* report, uint16_t len, uint16_t vid, uint16_t pid, JoyPort_t* context) {
+void x360c64_device_get_report(uint8_t const* report, uint16_t len,
+                               uint16_t vid, uint16_t pid, JoyPort_t* context) {
     Device_t device = x360c64_device_identify(vid, pid);
 
     if (device == PS4) {
@@ -49,6 +59,8 @@ void x360c64_device_get_report(uint8_t const* report, uint16_t len, uint16_t vid
     if (device == NINTENDO) {
         process_nintendo_pro(report, len, context);
     }
+
+    if (device == UNKNOWN) debug_report(report, len);
 }
 
 #endif
