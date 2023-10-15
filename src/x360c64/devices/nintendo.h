@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
+
+#include "controllercontext.h"
 #include "tusb.h"
 
 typedef struct TU_ATTR_PACKED {
@@ -21,6 +23,7 @@ typedef struct TU_ATTR_PACKED {
         uint8_t RT : 1;
         uint8_t LT : 1;
     };
+
     struct {
         uint8_t ZL : 1;
         uint8_t ZR : 1;
@@ -49,60 +52,35 @@ typedef struct TU_ATTR_PACKED {
     uint8_t left_analog_left_right, left_analog_up_down,
         right_analog_left_right, right_analog_up_down;
 
-    // housekeeping
-    uint8_t counter;
-
 } DeviceReport_t;
 
+static void process_nintendo_pro(uint8_t const *report, uint16_t len,
+                          JoyPort_t *joyPortState) {
+    DeviceReport_t deviceReport;
+    memcpy(&deviceReport, report, sizeof(deviceReport));
 
-void process_nintendo_pro(uint8_t const* report, uint16_t len) {
-    const char* dpad_str[] = {"N",  "NE", "E",  "SE",  "S",
-                              "SW", "W",  "NW", "none"};
+    joyPortState->dpad = deviceReport.dpad;
+    joyPortState->A = deviceReport.A;
+    joyPortState->B = deviceReport.B;
+    joyPortState->X = deviceReport.X;
 
-    // previous report used to compare for changes
-    static DeviceReport_t prev_report = {0};
+    if (hasChanged(joyPortState->POT1_X,
+                    deviceReport.left_analog_left_right)) {
+        joyPortState->POT1_X = deviceReport.left_analog_left_right;
+    }
 
-    uint8_t const report_id = report[0];
+    if (hasChanged(joyPortState->POT1_Y, deviceReport.left_analog_up_down)) {
+        joyPortState->POT1_Y = deviceReport.left_analog_up_down;
+    }
 
-    DeviceReport_t nin_report;
-    memcpy(&nin_report, report, sizeof(nin_report));
+    if (hasChanged(joyPortState->POT2_X,
+                    deviceReport.right_analog_left_right)) {
+        joyPortState->POT2_X = deviceReport.right_analog_left_right;
+    }
 
-    // counter is +1, assign to make it easier to compare 2 report
-    prev_report.counter = nin_report.counter;
-
-    // TODO: do I care about diff? good for analog
-    // only print if changes since it is polled ~ 5ms
-    // Since count+1 after each report and  x, y, z, rz fluctuate within 1
-    // or 2 We need more than memcmp to check if report is different enough
-    // if (diff_report(&prev_report, &nin_report)) {
-
-    printf("(la_lr, la_up, ra_lr, ra_ud) = (%u, %u, %u, %u)",
-           nin_report.left_analog_left_right, nin_report.left_analog_up_down,
-           nin_report.right_analog_left_right, nin_report.right_analog_up_down);
-    printf("DPad = %s ", dpad_str[nin_report.dpad]);
-
-    if (nin_report.A) printf("A ");
-    if (nin_report.B) printf("B ");
-    if (nin_report.X) printf("X ");
-    // if (nin_report.triangle) printf("Triangle ");
-
-    // if (nin_report.l1) printf("L1 ");
-    // if (nin_report.r1) printf("R1 ");
-    // if (nin_report.l2) printf("L2 ");
-    // if (nin_report.r2) printf("R2 ");
-
-    // if (nin_report.share) printf("Share ");
-    // if (nin_report.option) printf("Option ");
-    // if (nin_report.l3) printf("L3 ");
-    // if (nin_report.r3) printf("R3 ");
-
-    // if (nin_report.ps) printf("PS ");
-    // if (nin_report.tpad) printf("TPad ");
-
-    printf("\r");
-    fflush(stdout);
-
-    prev_report = nin_report;
+    if (hasChanged(joyPortState->POT2_Y, deviceReport.right_analog_up_down)) {
+        joyPortState->POT2_Y = deviceReport.right_analog_up_down;
+    }
 }
 
 #endif

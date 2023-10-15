@@ -5,6 +5,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "devices/controllercontext.h"
+#include "devices/nintendo.h"
+#include "devices/ps4.h"
+
 // enum for known devices
 typedef enum Device { UNKNOWN = 0, PS4, NINTENDO } Device_t;
 
@@ -26,7 +30,7 @@ static inline bool is_nintendo_pro(uint16_t vid, uint16_t pid) {
     );
 }
 
-// identify method
+// identify device
 Device_t x360c64_device_identify(uint16_t vid, uint16_t pid) {
     if (is_nintendo_pro(vid, pid)) return NINTENDO;
     if (is_sony_ds4(vid, pid)) return PS4;
@@ -34,6 +38,17 @@ Device_t x360c64_device_identify(uint16_t vid, uint16_t pid) {
     return UNKNOWN;
 }
 
-// TODO: get report in standard/normalized struct
+// get report in standard/normalized struct
+void x360c64_device_get_report(uint8_t const* report, uint16_t len, uint16_t vid, uint16_t pid, JoyPort_t* context) {
+    Device_t device = x360c64_device_identify(vid, pid);
+
+    if (device == PS4) {
+        process_sony_ds4(report, len, context);
+    }
+
+    if (device == NINTENDO) {
+        process_nintendo_pro(report, len, context);
+    }
+}
 
 #endif

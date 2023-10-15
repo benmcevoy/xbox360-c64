@@ -2,6 +2,11 @@
 
 Try and get a USB 360 contorller to work on the c64
 
+Oh dear.  I should really rename this repo, as the xbox controller is a pain...
+
+So far can talk to PS4 dualshock and a generic switch controller.
+
+
 TODO:
 
 - read controller via tinyusb
@@ -55,25 +60,22 @@ make -j4
 
 ```
 # make executable
+chmod +x ./build.sh
 chmod +x ./deploy.sh
 chmod +x ./monitor.sh
-chmod +x ./build.sh
 ```
 
 ```
 # get the picoprobe uf2 https://github.com/raspberrypi/picoprobe
 # build, then deploy via picoprobe, then start monitoring UART
-./build.sh
-./deploy.sh
-./monitor.sh
+
+./build.sh && ./deploy.sh && ./monitor.sh
 ```
 
+# Wiring
 
-# wiring
-
-For USB HID power the PICO via VBUS and not VSYS. 
+For USB HID power the PICO via VBUS and not VSYS. VBUS needs power so it can power the controllers.
 
 I am able to power from the other pico acting as the pico probe.
 
-
-
+It might be possible to power from the 5V line on the C64 joystick port, but I believe it only supplies 100mA?
