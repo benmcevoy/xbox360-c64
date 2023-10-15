@@ -35,7 +35,6 @@
 //--------------------------------------------------------------------+
 void led_blinking_task(void);
 
-extern void cdc_app_task(void);
 extern void hid_app_task(void);
 
 /*------------- MAIN -------------*/
@@ -55,7 +54,6 @@ int main(void)
     tuh_task();
 
     led_blinking_task();
-    //cdc_app_task();
     hid_app_task();
   }
 
@@ -77,7 +75,6 @@ void tuh_umount_cb(uint8_t dev_addr)
   // application tear-down
   printf("A device with address %d is unmounted \r\n", dev_addr);
 }
-
 
 //--------------------------------------------------------------------+
 // Blinking Task
