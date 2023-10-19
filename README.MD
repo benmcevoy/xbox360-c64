@@ -13,10 +13,15 @@ DONE - read controller via tinyusb
 - dpad is joystick
 - A is fire
 - B is UP
+- Analog stick map to d-pad, with a threshold
+
+
 NOPE - Analog stick is POTX/POTY - yeah maybe not - got no DAC
-- X and Y are c64gs secondary fire? - this I can do
+NOPE - X and Y are c64gs secondary fire? - this I can do
 DONE - PS4 controller? yep
 - Web interface to configure? see the pico fight stick
+
+
 
 
 ## prepare
@@ -71,7 +76,9 @@ chmod +x ./monitor.sh
 ./build.sh && ./deploy.sh && ./monitor.sh
 ```
 
-# Wiring
+# Schematic
+
+TODO: kicad
 
 For USB HID power the PICO via VBUS and not VSYS. VBUS needs power so it can power the controllers.
 
@@ -79,6 +86,20 @@ I am able to power from the other pico acting as the pico probe.
 
 It might be possible to power from the 5V line on the C64 joystick port, but I believe it only supplies 100mA?
 
-Currently I have button A (or what I call button A) to GP10
+I wouldn't try....
 
-it's pull down, I can make a multimeter go beep when I push the button.
+a GPIO goes high to 3v3 into the base of a transistor.  this allows a current to flow to the c64 gnd from the joystick input pin.
+
+Working on a breadboard.
+
+GPIO - 3v3  -> 22kOhm resistor -> to the base of 2n2222
+
+Emitter to GND
+Collector to C64 input pin
+
+Thanks to this, https://www.hackster.io/DocSnyderde/connect-usb-joystick-to-commodore-c64-2fb5ba
+
+
+
+
+

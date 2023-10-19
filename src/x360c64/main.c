@@ -84,9 +84,6 @@ void gpio_joyport_init() {
 
     gpio_init(gpio);
     gpio_set_dir(gpio, GPIO_OUT);
-    // // invert output
-    gpio_set_outover(gpio, GPIO_OVERRIDE_INVERT);
-    gpio_pull_down(gpio);
 }
 
 int main(void) {
@@ -106,6 +103,7 @@ int main(void) {
     sampler_init();
 
     while (1) {
+        // TODO: can something go on the other core? gpio timer?
         tuh_task();
         blink_led();
         hid_app_task();
