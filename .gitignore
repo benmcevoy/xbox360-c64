@@ -10,4 +10,5 @@ nohup.out
 .envrc
 docs/research.md
 schematic/usbcontroller-c64/usbcontroller-c64-backups
+schematic/~*.lck
 
