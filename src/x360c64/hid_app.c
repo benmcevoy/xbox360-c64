@@ -4,11 +4,18 @@
 
 static JoyPort_t* _context;
 
-void hid_app_init(JoyPort_t *context){
-  _context = context;
-}
+void hid_app_init(JoyPort_t* context) { _context = context; }
 
 void hid_app_task(void) {}
+
+static char* device_to_string(Device_t device) {
+    switch (device) {
+        case NINTENDO: return "NINTENDO";
+        case PS4: return "PS4";
+        case XBOX_360: return "XBOX_360";
+        default: return "UNKNOWN";
+    }
+}
 
 void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance,
                       uint8_t const* desc_report, uint16_t desc_len) {
@@ -22,6 +29,7 @@ void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance,
     printf("VID = %04x, PID = %04x\r\n", vid, pid);
 
     Device_t device = x360c64_device_identify(vid, pid);
+    printf("Identified device as %s\r\n", device_to_string(device));
 
     if (device != UNKNOWN) {
         if (!tuh_hid_receive_report(dev_addr, instance)) {

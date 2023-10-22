@@ -8,9 +8,10 @@
 #include "devices/controllercontext.h"
 #include "devices/nintendo.h"
 #include "devices/ps4.h"
+#include "devices/xbox_360.h"
 
 // enum for known devices
-typedef enum Device { UNKNOWN = 0, PS4, NINTENDO } Device_t;
+typedef enum Device { UNKNOWN = 0, PS4, NINTENDO, XBOX_360 } Device_t;
 
 static inline bool is_sony_ds4(uint16_t vid, uint16_t pid) {
     return (
@@ -18,7 +19,11 @@ static inline bool is_sony_ds4(uint16_t vid, uint16_t pid) {
         || (vid == 0x0f0d && pid == 0x005e)                  // Hori FC4
         || (vid == 0x0f0d && pid == 0x00ee)  // Hori PS4 Mini (PS4-099U)
         || (vid == 0x1f4f && pid == 0x1002)  // ASW GG xrd controller
-        );
+    );
+}
+
+static inline bool is_xbox_360(uint16_t vid, uint16_t pid) {
+    return (vid == 0x045E && pid == 0x028E);
 }
 
 static inline bool is_nintendo_pro(uint16_t vid, uint16_t pid) {
@@ -43,6 +48,7 @@ static void debug_report(uint8_t const* report, uint16_t len) {
 Device_t x360c64_device_identify(uint16_t vid, uint16_t pid) {
     if (is_nintendo_pro(vid, pid)) return NINTENDO;
     if (is_sony_ds4(vid, pid)) return PS4;
+    if (is_xbox_360(vid, pid)) return XBOX_360;
 
     return UNKNOWN;
 }
@@ -58,6 +64,11 @@ void x360c64_device_get_report(uint8_t const* report, uint16_t len,
 
     if (device == NINTENDO) {
         process_nintendo_pro(report, len, context);
+    }
+
+    if (device == XBOX_360) {
+        debug_report(report, len);
+        //process_xbox_360(report, len, context);
     }
 
     if (device == UNKNOWN) debug_report(report, len);

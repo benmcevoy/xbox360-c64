@@ -1,5 +1,5 @@
-#ifndef X360C64_DEVICE_NINTENDO
-#define X360C64_DEVICE_NINTENDO
+#ifndef X360C64_DEVICE_XBOX_360
+#define X360C64_DEVICE_XBOX_360
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -52,11 +52,11 @@ typedef struct TU_ATTR_PACKED {
     uint8_t left_analog_left_right, left_analog_up_down,
         right_analog_left_right, right_analog_up_down;
 
-} nintendo_report_t;
+} xbox_report_t;
 
-static void process_nintendo_pro(uint8_t const *report, uint16_t len,
+static void process_xbox_360(uint8_t const *report, uint16_t len,
                           JoyPort_t *joyPortState) {
-    nintendo_report_t deviceReport;
+    xbox_report_t deviceReport;
     memcpy(&deviceReport, report, sizeof(deviceReport));
 
     joyPortState->dpad = deviceReport.dpad;
