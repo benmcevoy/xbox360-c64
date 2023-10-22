@@ -46,7 +46,7 @@
   (setup
     (pad_to_mask_clearance 0)
     (pcbplotparams
-      (layerselection 0x00010fc_ffffffff)
+      (layerselection 0x00010f0_ffffffff)
       (plot_on_all_layers_selection 0x0000000_00000000)
       (disableapertmacros false)
       (usegerberextensions false)
@@ -69,15 +69,15 @@
       (psnegative false)
       (psa4output false)
       (plotreference true)
-      (plotvalue true)
+      (plotvalue false)
       (plotinvisibletext false)
       (sketchpadsonfab false)
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
-      (outputdirectory "")
+      (outputdirectory "gerbers/")
     )
   )
 
@@ -1527,7 +1527,7 @@
     (tstamp b2a88861-55f9-4714-8281-7bb623564d4c)
     (at 152.5524 135.3058 180)
     (attr board_only exclude_from_pos_files exclude_from_bom)
-    (fp_text reference "G***" (at 0 0) (layer "F.SilkS")
+    (fp_text reference "G***" (at 0 0) (layer "F.SilkS") hide
         (effects (font (size 1.5 1.5) (thickness 0.3)))
       (tstamp c8256e92-8d59-4fe0-907c-18a541889ba5)
     )
