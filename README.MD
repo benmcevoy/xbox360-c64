@@ -9,20 +9,16 @@ So far can talk to PS4 dualshock and a generic switch controller.
 
 TODO:
 
-DONE - read controller via tinyusb
+- DONE: read controller via tinyusb
 - dpad is joystick
 - A is fire
 - B is UP
 - Analog stick map to d-pad, with a threshold
-
-
-NOPE - Analog stick is POTX/POTY - yeah maybe not - got no DAC
-NOPE - X and Y are c64gs secondary fire? - this I can do
-DONE - PS4 controller? yep
 - Web interface to configure? see the pico fight stick
-
-
-
+- NOPE: Analog stick is POTX/POTY - yeah maybe not - got no DAC
+- NOPE: X and Y are c64gs secondary fire? - this I can do
+- DONE: PS4 controller? yep
+- DONE read controller via tinyusb
 
 ## prepare
 clone with submodules, e,g,
@@ -78,8 +74,6 @@ chmod +x ./monitor.sh
 
 # Schematic
 
-TODO: kicad
-
 For USB HID power the PICO via VBUS and not VSYS. VBUS needs power so it can power the controllers.
 
 I am able to power from the other pico acting as the pico probe.
@@ -98,6 +92,12 @@ Emitter to GND
 Collector to C64 input pin
 
 Thanks to this, https://www.hackster.io/DocSnyderde/connect-usb-joystick-to-commodore-c64-2fb5ba
+
+
+![Board front](docs/assets/board_front.png?raw=true "Board front")
+
+
+![Board back](docs/assets/board_front.png?raw=true "Board back")
 
 
 
