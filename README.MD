@@ -97,7 +97,7 @@ Thanks to this, https://www.hackster.io/DocSnyderde/connect-usb-joystick-to-comm
 ![Board front](docs/assets/board_front.png?raw=true "Board front")
 
 
-![Board back](docs/assets/board_front.png?raw=true "Board back")
+![Board back](docs/assets/board_back.png?raw=true "Board back")
 
 
 
