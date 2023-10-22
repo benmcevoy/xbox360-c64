@@ -6,6 +6,8 @@ Oh dear.  I should really rename this repo, as the xbox controller is a pain...
 
 So far can talk to PS4 dualshock and a generic switch controller.
 
+NOTE: The schematic and the code do not agree yet.  I have not assigned the GPIO pins in the code.
+
 
 TODO:
 
@@ -18,7 +20,7 @@ TODO:
 - NOPE: Analog stick is POTX/POTY - yeah maybe not - got no DAC
 - NOPE: X and Y are c64gs secondary fire? - this I can do
 - DONE: PS4 controller? yep
-- DONE read controller via tinyusb
+- DONE: read controller via tinyusb
 
 ## prepare
 clone with submodules, e,g,
@@ -89,10 +91,12 @@ Working on a breadboard.
 GPIO - 3v3  -> 22kOhm resistor -> to the base of 2n2222
 
 Emitter to GND
+
 Collector to C64 input pin
 
 Thanks to this, https://www.hackster.io/DocSnyderde/connect-usb-joystick-to-commodore-c64-2fb5ba
 
+The power and joystick headers will be right angled or just solder direct.
 
 ![Board front](docs/assets/board_front.png?raw=true "Board front")
 
