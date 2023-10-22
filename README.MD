@@ -6,8 +6,6 @@ Oh dear.  I should really rename this repo, as the xbox controller is a pain...
 
 So far can talk to PS4 dualshock and a generic switch controller.
 
-NOTE: The schematic and the code do not agree yet.  I have not assigned the GPIO pins in the code.
-
 
 TODO:
 

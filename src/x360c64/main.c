@@ -16,7 +16,12 @@ static JoyPort_t* _context;
 
 static int hz = 1000;
 static repeating_timer_t _timer;
-static const int gpio = 10;
+
+static const uint GPIO_UP = 4;
+static const uint GPIO_DOWN = 2;
+static const uint GPIO_LEFT = 3;
+static const uint GPIO_RIGHT = 28;
+static const uint GPIO_FIRE = 27;
 
 static void debug_context() {
     // slow this down to a reasonable level for stdio
@@ -35,11 +40,25 @@ static void debug_context() {
 }
 
 bool sampler_callback(repeating_timer_t* rt) {
-    // TODO: GPIO - this working but pretty budget
 
     debug_context();
 
-    gpio_put(gpio, _context->A);
+    if(_context->dpad == 8 && !_context->A){
+        gpio_put(GPIO_UP, false);
+        gpio_put(GPIO_DOWN, false);
+        gpio_put(GPIO_LEFT, false);
+        gpio_put(GPIO_RIGHT, false);
+    }
+    else {
+        // A is also JUMP
+        // TODO: test analog POT if > or < some threshold
+        gpio_put(GPIO_UP, (_context->dpad == 0) || (_context->dpad == 1) || (_context->dpad == 7)|| _context->A);
+        gpio_put(GPIO_DOWN, (_context->dpad == 3) || (_context->dpad == 4)|| (_context->dpad == 5));
+        gpio_put(GPIO_LEFT, (_context->dpad == 1) || (_context->dpad == 2)|| (_context->dpad == 3));
+        gpio_put(GPIO_RIGHT, (_context->dpad == 5) || (_context->dpad == 6)|| (_context->dpad == 7));
+    }
+    
+    gpio_put(GPIO_FIRE, _context->B);
 
     return true;
 }
@@ -80,10 +99,20 @@ void sampler_init() {
 }
 
 void gpio_joyport_init() {
+    gpio_init(GPIO_UP);
+    gpio_set_dir(GPIO_UP, GPIO_OUT);
 
+    gpio_init(GPIO_DOWN);
+    gpio_set_dir(GPIO_DOWN, GPIO_OUT);
 
-    gpio_init(gpio);
-    gpio_set_dir(gpio, GPIO_OUT);
+    gpio_init(GPIO_LEFT);
+    gpio_set_dir(GPIO_LEFT, GPIO_OUT);
+
+    gpio_init(GPIO_RIGHT);
+    gpio_set_dir(GPIO_RIGHT, GPIO_OUT);
+
+    gpio_init(GPIO_FIRE);
+    gpio_set_dir(GPIO_FIRE, GPIO_OUT);
 }
 
 int main(void) {
