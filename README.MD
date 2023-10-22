@@ -76,23 +76,9 @@ chmod +x ./monitor.sh
 
 # Schematic
 
-For USB HID power the PICO via VBUS and not VSYS. VBUS needs power so it can power the controllers.
+For USB HID power the Pico via VBUS and not VSYS. VBUS needs power so it can power the controllers.
 
-I am able to power from the other pico acting as the pico probe.
-
-It might be possible to power from the 5V line on the C64 joystick port, but I believe it only supplies 100mA?
-
-I wouldn't try....
-
-a GPIO goes high to 3v3 into the base of a transistor.  this allows a current to flow to the c64 gnd from the joystick input pin.
-
-Working on a breadboard.
-
-GPIO - 3v3  -> 22kOhm resistor -> to the base of 2n2222
-
-Emitter to GND
-
-Collector to C64 input pin
+USB controller is plugged directly into the Pico USB port.  
 
 Thanks to this, https://www.hackster.io/DocSnyderde/connect-usb-joystick-to-commodore-c64-2fb5ba
 
