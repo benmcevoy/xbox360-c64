@@ -9,9 +9,6 @@ So far I can read:
 - ps4 ds4
 
 
-
-
-
 TODO:
 
 - DONE: read controller via tinyusb
@@ -49,7 +46,8 @@ export environment variables
 ## cmake
 ```
 cd src\build
-cmake ..
+# debug build
+cmake ../ -DCMAKE_BUILD_TYPE=Debug
 ```
 
 ## make
