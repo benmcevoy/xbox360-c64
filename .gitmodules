@@ -1,0 +1,4 @@
+[submodule "pico-sdk"]
+	path = pico-sdk
+	url = https://github.com/benmcevoy/pico-sdk.git
+	branch = xinput
