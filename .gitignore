@@ -1,4 +1,5 @@
 ﻿openocd/
+tools/
 pico-examples/
 pico-playground/
 pico-extras/
@@ -12,3 +13,4 @@ docs/research.md
 schematic/usbcontroller-c64/usbcontroller-c64-backups
 schematic/~*.lck
 
+.vscode/

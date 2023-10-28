@@ -12,54 +12,100 @@ typedef struct TU_ATTR_PACKED {
     // this is "packed".
     // e.g. d-pad is 3 bits of a byte
 
-    // b0: buttons =  A:1, B:2, x:4, rt: 128, lt: 64
-    // b1: buttons: +:8 -:4 zr:2 zl:1, left analog stick push: 32  right analog
-    // stick push: 64
+    // b0 and b1 are some kind of report
+    uint8_t b0, b1;
+    
+    // byte 2 is d-pad
     struct {
+        uint8_t dpad : 4;     // 0=released  0x0000LRDU
+        uint8_t start: 1;      
+        uint8_t back: 1;      
+        uint8_t left_analog_click : 1;  
+        uint8_t right_analog_click: 1;  
+    };
+
+    // b3: buttons = left_should=1,rs=2,  A:16, B:32, x:64, y=128
+    
+    struct {
+        uint8_t LS : 1; // left shoulder button
+        uint8_t RS : 1;
+        uint8_t HOME : 1;
+        uint8_t ignore1: 1;     // not used
         uint8_t A : 1;
         uint8_t B : 1;
-        uint8_t X : 1;
-        uint8_t ignore0 : 3;
-        uint8_t RT : 1;
-        uint8_t LT : 1;
+        uint8_t X : 1; 
+        uint8_t Y : 1;
     };
+
+    uint8_t left_trigger;
+    uint8_t right_trigger;
 
     struct {
         uint8_t ZL : 1;
         uint8_t ZR : 1;
         uint8_t minus : 1;
         uint8_t plus : 1;
-        uint8_t ignore1 : 1;
+        uint8_t ignore2 : 1;
         uint8_t LA : 1;
         uint8_t RA : 1;
-        uint8_t ignore2 : 1;
+        uint8_t ignore3 : 1;
     };
 
-    // byte 2 is d-pad
-    struct {
-        uint8_t dpad : 4;     // (hat format, 0x08 is released, 0=N, 1=NE, 2=E,
-                              // 3=SE, 4=S, 5=SW, 6=W, 7=NW)
-        uint8_t ignore3 : 4;  // not used
-    };
-
-    // analog sticks
-    // bytes 3,4,5,6
-    // 3: left analog left-right axis:  0..255 128 is centered
-    // 4: left analog up-down axis:  0..255 128 is centered
-    // 5: right analog left-right axis:  0..255 128 is centered
-    // 6: right analog up-down axis:  0..255 128 is centered
-
+    // byte6,7,8,9,10,11,12,13 are analog sticks
+    // 4 16 bit values
+    // TODO: what the hell, what endian is this?
+    
     uint8_t left_analog_left_right, left_analog_up_down,
         right_analog_left_right, right_analog_up_down;
+    uint8_t left_analog_left_right1, left_analog_up_down1,
+        right_analog_left_right1, right_analog_up_down1;
 
 } xbox_report_t;
+
+static uint8_t normalize_dpad(uint8_t xdpad) {
+    // xdpad up=1 d=2, l=4, r=8  start=16 back=32  la_click=64 ra_click=128, 
+
+    const uint8_t UP = 1;
+    const uint8_t DOWN = 2;
+    const uint8_t LEFT = 4;
+    const uint8_t RIGHT = 8;
+
+
+    // "normal" dpad is (hat format, 0x08 is released, 0=N, 1=NE, 2=E,
+    // 3=SE, 4=S, 5=SW, 6=W, 7=NW)
+    uint8_t dpad = 0;
+
+    // UP
+    if(xdpad == UP) return 0;
+    if(xdpad == UP + LEFT) return 7;
+    if(xdpad == UP + RIGHT) return 1;
+
+    // DOWN
+    if(xdpad == DOWN) return 4;
+    if(xdpad == DOWN + LEFT) return 5;
+    if(xdpad == DOWN + RIGHT) return 3;
+
+    // LEFT
+    if(xdpad == LEFT) return 6;
+
+    // RIGHT
+    if(xdpad == RIGHT) return 2;
+    
+    // released
+    return 8;
+}
 
 static void process_xbox_360(uint8_t const *report, uint16_t len,
                           JoyPort_t *joyPortState) {
     xbox_report_t deviceReport;
     memcpy(&deviceReport, report, sizeof(deviceReport));
 
-    joyPortState->dpad = deviceReport.dpad;
+    // xbox hat format is different
+    uint8_t dpad = normalize_dpad(deviceReport.dpad);
+
+    //printf("%u %u\r\n", deviceReport.dpad, dpad);
+
+    joyPortState->dpad = dpad;
     joyPortState->A = deviceReport.A;
     joyPortState->B = deviceReport.B;
     joyPortState->X = deviceReport.X;

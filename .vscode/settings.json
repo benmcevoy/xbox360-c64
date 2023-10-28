@@ -6,6 +6,22 @@
         "controllercontext.h": "c",
         "tusb.h": "c"
     },
+    "cmake.statusbar.advanced": {
+        "debug": {
+            "visibility": "hidden"
+        },
+        "launch": {
+            "visibility": "hidden"
+        },
+        "build": {
+            "visibility": "hidden"
+        },
+        "buildTarget": {
+            "visibility": "hidden"
+        }
+    },
+    "cmake.buildBeforeRun": true,
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "cmake.configureOnOpen": true,
-    "cmake.sourceDirectory": "/media/ben/DATA/Dev/git/xbox360-c64/src"
+    "cmake.sourceDirectory": "/media/ben/DATA/Dev/git/xbox360-c64/src/xbox360-c64"
 }

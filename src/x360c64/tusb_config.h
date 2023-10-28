@@ -30,6 +30,14 @@
  extern "C" {
 #endif
 
+
+// CFG_TUSB_DEBUG for debugging - printf to uart
+// 0 : no debug
+// 1 : print error
+// 2 : print warning
+// 3 : print info
+#define CFG_TUSB_DEBUG  0
+
 //--------------------------------------------------------------------+
 // Board Specific Configuration
 //--------------------------------------------------------------------+

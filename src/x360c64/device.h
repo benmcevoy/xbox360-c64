@@ -67,8 +67,8 @@ void x360c64_device_get_report(uint8_t const* report, uint16_t len,
     }
 
     if (device == XBOX_360) {
-        debug_report(report, len);
-        //process_xbox_360(report, len, context);
+        //debug_report(report, len);
+        process_xbox_360(report, len, context);
     }
 
     if (device == UNKNOWN) debug_report(report, len);
