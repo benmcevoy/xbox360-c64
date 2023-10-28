@@ -2,9 +2,14 @@
 
 Try and get a USB 360 controller to work on the c64
 
-Oh dear.  I should really rename this repo, as the xbox controller is a pain...
+So far I can read:
 
-So far can talk to PS4 dualshock and a generic switch controller.
+- xbox 360 wired controller
+- generic wired switch controller
+- ps4 ds4
+
+
+
 
 
 TODO:
