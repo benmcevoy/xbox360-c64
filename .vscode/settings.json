@@ -23,5 +23,5 @@
     "cmake.buildBeforeRun": true,
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "cmake.configureOnOpen": true,
-    "cmake.sourceDirectory": "/media/ben/DATA/Dev/git/xbox360-c64/src/xbox360-c64"
+    "cmake.sourceDirectory": "/media/ben/DATA/Dev/git/xbox360-c64/src/x360c64"
 }
