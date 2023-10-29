@@ -2,6 +2,10 @@
 
 Try and get a USB 360 controller to work on the c64
 
+xinput support is more or less copied from https://github.com/hathach/tinyusb/discussions/1929
+
+
+
 So far I can read:
 
 - xbox 360 wired controller
