@@ -8,9 +8,18 @@ xinput support is more or less copied from https://github.com/hathach/tinyusb/di
 
 So far I can read:
 
-- xbox 360 wired controller
-- generic wired switch controller
+- xbox 360 wired controller (analog mapping is dodgy)
+- generic wired switch controller 
 - ps4 ds4
+
+I cannot read but have on hand to test with:
+
+- GP204-CE fight stick xinput (crashes)
+- GP204-CE ps4 (almost, but dpad is wrong when idle)
+- GP204-CE ps3 directinput
+- GP204-CE nintendo 
+- real ps3
+- 8bitdo ultimate
 
 
 TODO:
@@ -93,8 +102,4 @@ The power and joystick headers will be right angled or just solder direct.
 
 
 ![Board back](docs/assets/board_back.png?raw=true "Board back")
-
-
-
-
 

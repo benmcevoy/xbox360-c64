@@ -11,7 +11,18 @@
 #include "devices/xbox_360.h"
 
 // enum for known devices
-typedef enum Device { UNKNOWN = 0, PS4, NINTENDO, XBOX_360 } Device_t;
+typedef enum Device { UNKNOWN = 0, PS4, NINTENDO, XBOX_360, PS3 } Device_t;
+
+static char* device_to_string(Device_t device) {
+    switch (device) {
+        case NINTENDO: return "NINTENDO";
+        case PS3: return "PS3";
+        case PS4: return "PS4";
+        case XBOX_360: return "XBOX_360";
+        
+        default: return "UNKNOWN";
+    }
+}
 
 static inline bool is_sony_ds4(uint16_t vid, uint16_t pid) {
     return (
@@ -19,7 +30,15 @@ static inline bool is_sony_ds4(uint16_t vid, uint16_t pid) {
         || (vid == 0x0f0d && pid == 0x005e)                  // Hori FC4
         || (vid == 0x0f0d && pid == 0x00ee)  // Hori PS4 Mini (PS4-099U)
         || (vid == 0x1f4f && pid == 0x1002)  // ASW GG xrd controller
+        || (vid == 0x1532 && pid == 0x0401)  // Razer Arcade Stick [Panthera]
+        || (vid == 0x0738 && pid == 0x8180)  // Madcatz Fightstick Alpha PS4
+        || (vid == 0x33df && pid == 0x0011)  // Mayflash
     );
+}
+
+static inline bool is_ps3(uint16_t vid, uint16_t pid) {
+    // Batoh Device / PlayStation 3 Controller
+    return (vid == 0x054C && pid == 0x0268);
 }
 
 static inline bool is_xbox_360(uint16_t vid, uint16_t pid) {
@@ -27,11 +46,20 @@ static inline bool is_xbox_360(uint16_t vid, uint16_t pid) {
 }
 
 static inline bool is_nintendo_pro(uint16_t vid, uint16_t pid) {
-    // my kmart/anko controller reports itself as many things
     return (
         (vid == 0x057e && pid == 0x2009)     // nin switch controller/pro
+    );
+}
+
+static inline bool is_nintendo(uint16_t vid, uint16_t pid) {
+    // my kmart/anko controller reports itself as many things
+    return (
+        is_nintendo_pro(vid, pid)     
         || (vid == 0x2563 && pid == 0x0575)  // Shenzhen Wired Controller
         || (vid == 0x20BC && pid == 0x5500)  // Guangzhou P frostbite controller
+        || (vid == 0x0F0D && pid == 0x00C1)  // Horipad
+        || (vid == 0x0F0D && pid == 0x0092)  // Horpad pokken
+        || (vid == 0x2563 && pid == 0x0575)  // ZD-V+ Wired Gaming Controller
     );
 }
 
@@ -46,9 +74,10 @@ static void debug_report(uint8_t const* report, uint16_t len) {
 
 // identify device
 Device_t x360c64_device_identify(uint16_t vid, uint16_t pid) {
-    if (is_nintendo_pro(vid, pid)) return NINTENDO;
+    if (is_nintendo(vid, pid)) return NINTENDO;
     if (is_sony_ds4(vid, pid)) return PS4;
     if (is_xbox_360(vid, pid)) return XBOX_360;
+    if (is_ps3(vid, pid)) return PS3;
 
     return UNKNOWN;
 }
@@ -67,7 +96,12 @@ void x360c64_device_get_report(uint8_t const* report, uint16_t len,
     }
 
     if (device == XBOX_360) {
+        //debug_report(report, len);
         process_xbox_360(report, len, context);
+    }
+
+    if (device == PS3) {
+       debug_report(report, len);
     }
 
     if (device == UNKNOWN) debug_report(report, len);

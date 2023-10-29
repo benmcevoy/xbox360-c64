@@ -31,8 +31,8 @@ static void debug_context() {
 
     if (delay == 0) {
         delay = 100;
-        printf("DPAD:%03u A:%03u B:%03u X:%03u Y:%03u POT_X:%03u POT_Y:%03u", _context->dpad, _context->A,
-               _context->B, _context->X, _context->Y, _context->POT1_X, _context->POT1_Y);
+        printf("DPAD:%03u A:%03u B:%03u X:%03u Y:%03u POT1_X:%03u POT1_Y:%03u POT2_X:%03u POT2_Y:%03u", _context->dpad, _context->A,
+               _context->B, _context->X, _context->Y, _context->POT1_X, _context->POT1_Y, _context->POT2_X, _context->POT2_Y);
 
         printf("\r");
         fflush(stdout);
@@ -52,6 +52,8 @@ bool sampler_callback(repeating_timer_t* rt) {
     else {
         // A is also JUMP
         // TODO: test analog POT if > or < some threshold
+        // looks like threshold should be about 32 
+        // something like L = 0..32 R=224..255 
         gpio_put(GPIO_UP, (_context->dpad == 0) || (_context->dpad == 1) || (_context->dpad == 7)|| _context->B);
         gpio_put(GPIO_DOWN, (_context->dpad == 3) || (_context->dpad == 4)|| (_context->dpad == 5));
         gpio_put(GPIO_LEFT, (_context->dpad == 1) || (_context->dpad == 2)|| (_context->dpad == 3));

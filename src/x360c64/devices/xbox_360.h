@@ -40,23 +40,14 @@ typedef struct TU_ATTR_PACKED {
     uint8_t left_trigger;
     uint8_t right_trigger;
 
-    struct {
-        uint8_t ZL : 1;
-        uint8_t ZR : 1;
-        uint8_t minus : 1;
-        uint8_t plus : 1;
-        uint8_t ignore2 : 1;
-        uint8_t LA : 1;
-        uint8_t RA : 1;
-        uint8_t ignore3 : 1;
-    };
-
     // byte6,7,8,9,10,11,12,13 are analog sticks
     // 4 16 bit values
     // TODO: what the hell, what endian is this?
     
     uint8_t la_b0, la_b1, la_b2, la_b3;
     uint8_t ra_b0, ra_b1, ra_b2, ra_b3;
+
+    uint8_t unused1, unused2, unused3, unused4, unused5, unused6;
 
 } xbox_report_t;
 
@@ -109,22 +100,21 @@ static void process_xbox_360(uint8_t const *report, uint16_t len,
     joyPortState->X = deviceReport.X;
     joyPortState->Y = deviceReport.Y;
 
-    if (hasChanged(joyPortState->POT1_X,
-                    deviceReport.la_b0)) {
+    // oh microsoft... normalise analog too - verticals are inverse
+    if (hasChanged(joyPortState->POT1_X, deviceReport.la_b0)) {
         joyPortState->POT1_X = deviceReport.la_b0;
     }
 
-    if (hasChanged(joyPortState->POT1_Y, deviceReport.la_b2)) {
-        joyPortState->POT1_Y = deviceReport.la_b2;
+    if (hasChanged(joyPortState->POT1_Y, 255 - deviceReport.la_b2)) {
+        joyPortState->POT1_Y = 255 - deviceReport.la_b2;
     }
 
-    if (hasChanged(joyPortState->POT2_X,
-                    deviceReport.ra_b0)) {
+    if (hasChanged(joyPortState->POT2_X, deviceReport.ra_b0)) {
         joyPortState->POT2_X = deviceReport.ra_b0;
     }
 
-    if (hasChanged(joyPortState->POT2_Y, deviceReport.ra_b2)) {
-        joyPortState->POT2_Y = deviceReport.ra_b2;
+    if (hasChanged(joyPortState->POT2_Y, 255 - deviceReport.ra_b2)) {
+        joyPortState->POT2_Y = 255 - deviceReport.ra_b2;
     }
 }
 

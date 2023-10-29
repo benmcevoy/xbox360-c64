@@ -6,6 +6,7 @@ pico-extras/
 picoprobe/
 picotool/
 src/build/
+build/
 
 nohup.out
 .envrc
@@ -14,3 +15,4 @@ schematic/usbcontroller-c64/usbcontroller-c64-backups
 schematic/~*.lck
 
 .vscode/
+debug.sh
