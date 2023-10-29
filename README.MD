@@ -6,9 +6,9 @@ xinput support is more or less copied from https://github.com/hathach/tinyusb/di
 
 
 
-So far I can read:
+So far I can read (refer: device.h):
 
-- xbox 360 wired controller (analog mapping is dodgy)
+- xbox 360 wired controller 
 - generic wired switch controller 
 - ps4 ds4
 
