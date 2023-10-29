@@ -19,7 +19,8 @@ typedef struct TU_ATTR_PACKED {
         uint8_t A : 1;
         uint8_t B : 1;
         uint8_t X : 1;
-        uint8_t ignore0 : 3;
+        uint8_t Y : 1;
+        uint8_t ignore0 : 2;
         uint8_t RT : 1;
         uint8_t LT : 1;
     };
@@ -60,9 +61,11 @@ static void process_nintendo_pro(uint8_t const *report, uint16_t len,
     memcpy(&deviceReport, report, sizeof(deviceReport));
 
     joyPortState->dpad = deviceReport.dpad;
-    joyPortState->A = deviceReport.A;
-    joyPortState->B = deviceReport.B;
-    joyPortState->X = deviceReport.X;
+    joyPortState->A = deviceReport.B;
+    joyPortState->B = deviceReport.A;
+    // TODO: my Y button does not seem to work? maybe my contorller is broken
+    joyPortState->X = deviceReport.Y;
+    joyPortState->Y = deviceReport.X;
 
     if (hasChanged(joyPortState->POT1_X,
                     deviceReport.left_analog_left_right)) {

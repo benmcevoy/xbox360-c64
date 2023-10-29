@@ -7,12 +7,12 @@
 #include "tusb.h"
 
 typedef struct TU_ATTR_PACKED {
-    // buttons
+    // buttons  XBOBX style not nintendo
     struct {
         uint8_t A : 1;
         uint8_t B : 1;
         uint8_t X : 1;
-        uint8_t not_used : 1;
+        uint8_t Y : 1;
         uint8_t dpad : 4;
     };
 

@@ -39,7 +39,7 @@ static void debug_report(uint8_t const* report, uint16_t len) {
     // we have a pointer to a bunch of bytes, len bytes in fact
     printf("report:\r");
     for (uint16_t i = 0; i < len; i++) {
-        printf("%u ", *(report + (i * sizeof(uint8_t))));
+        printf("%03u ", *(report + (i * sizeof(uint8_t))));
     }
     fflush(stdout);
 }
@@ -67,7 +67,6 @@ void x360c64_device_get_report(uint8_t const* report, uint16_t len,
     }
 
     if (device == XBOX_360) {
-        //debug_report(report, len);
         process_xbox_360(report, len, context);
     }
 

@@ -55,10 +55,8 @@ typedef struct TU_ATTR_PACKED {
     // 4 16 bit values
     // TODO: what the hell, what endian is this?
     
-    uint8_t left_analog_left_right, left_analog_up_down,
-        right_analog_left_right, right_analog_up_down;
-    uint8_t left_analog_left_right1, left_analog_up_down1,
-        right_analog_left_right1, right_analog_up_down1;
+    uint8_t la_b0, la_b1, la_b2, la_b3;
+    uint8_t ra_b0, ra_b1, ra_b2, ra_b3;
 
 } xbox_report_t;
 
@@ -109,23 +107,24 @@ static void process_xbox_360(uint8_t const *report, uint16_t len,
     joyPortState->A = deviceReport.A;
     joyPortState->B = deviceReport.B;
     joyPortState->X = deviceReport.X;
+    joyPortState->Y = deviceReport.Y;
 
     if (hasChanged(joyPortState->POT1_X,
-                    deviceReport.left_analog_left_right)) {
-        joyPortState->POT1_X = deviceReport.left_analog_left_right;
+                    deviceReport.la_b0)) {
+        joyPortState->POT1_X = deviceReport.la_b0;
     }
 
-    if (hasChanged(joyPortState->POT1_Y, deviceReport.left_analog_up_down)) {
-        joyPortState->POT1_Y = deviceReport.left_analog_up_down;
+    if (hasChanged(joyPortState->POT1_Y, deviceReport.la_b2)) {
+        joyPortState->POT1_Y = deviceReport.la_b2;
     }
 
     if (hasChanged(joyPortState->POT2_X,
-                    deviceReport.right_analog_left_right)) {
-        joyPortState->POT2_X = deviceReport.right_analog_left_right;
+                    deviceReport.ra_b0)) {
+        joyPortState->POT2_X = deviceReport.ra_b0;
     }
 
-    if (hasChanged(joyPortState->POT2_Y, deviceReport.right_analog_up_down)) {
-        joyPortState->POT2_Y = deviceReport.right_analog_up_down;
+    if (hasChanged(joyPortState->POT2_Y, deviceReport.ra_b2)) {
+        joyPortState->POT2_Y = deviceReport.ra_b2;
     }
 }
 

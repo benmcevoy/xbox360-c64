@@ -4,7 +4,8 @@
         "board.h": "c",
         "hid_host.h": "c",
         "controllercontext.h": "c",
-        "tusb.h": "c"
+        "tusb.h": "c",
+        "gpio.h": "c"
     },
     "cmake.statusbar.advanced": {
         "debug": {

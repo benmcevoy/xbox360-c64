@@ -64,9 +64,10 @@ static void process_sony_ds4(uint8_t const* report, uint16_t len,
         memcpy(&deviceReport, report, sizeof(deviceReport));
 
         joyPortState->dpad = deviceReport.dpad;
-        joyPortState->A = deviceReport.circle;
-        joyPortState->B = deviceReport.cross;
-        joyPortState->X = deviceReport.triangle;
+        joyPortState->A = deviceReport.cross;
+        joyPortState->B = deviceReport.circle;
+        joyPortState->X = deviceReport.square;
+        joyPortState->Y = deviceReport.triangle;
 
         if (hasChanged(joyPortState->POT1_X,
                        deviceReport.x)) {
