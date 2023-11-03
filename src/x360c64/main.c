@@ -20,8 +20,8 @@ static repeating_timer_t _timer;
 static const uint GPIO_UP = 4;
 static const uint GPIO_DOWN = 2;
 static const uint GPIO_LEFT = 3;
-static const uint GPIO_RIGHT = 28;
-static const uint GPIO_FIRE = 27;
+static const uint GPIO_RIGHT = 27;
+static const uint GPIO_FIRE = 28;
 
 static void debug_context() {
     // slow this down to a reasonable level for stdio
@@ -41,26 +41,22 @@ static void debug_context() {
 
 bool sampler_callback(repeating_timer_t* rt) {
 
-    debug_context();
+    const uint8_t THRESHOLD = 48;
 
-    if(_context->dpad == 8 && !_context->A){
-        gpio_put(GPIO_UP, false);
-        gpio_put(GPIO_DOWN, false);
-        gpio_put(GPIO_LEFT, false);
-        gpio_put(GPIO_RIGHT, false);
-    }
-    else {
-        // A is also JUMP
-        // TODO: test analog POT if > or < some threshold
-        // looks like threshold should be about 32 
-        // something like L = 0..32 R=224..255 
-        gpio_put(GPIO_UP, (_context->dpad == 0) || (_context->dpad == 1) || (_context->dpad == 7)|| _context->B);
-        gpio_put(GPIO_DOWN, (_context->dpad == 3) || (_context->dpad == 4)|| (_context->dpad == 5));
-        gpio_put(GPIO_LEFT, (_context->dpad == 1) || (_context->dpad == 2)|| (_context->dpad == 3));
-        gpio_put(GPIO_RIGHT, (_context->dpad == 5) || (_context->dpad == 6)|| (_context->dpad == 7));
-    }
+    debug_context();
     
-    gpio_put(GPIO_FIRE, _context->B);
+    // TODO: test this.  add in POT2
+    bool isUp = (_context->dpad == 7) || (_context->dpad == 0) || (_context->dpad == 1) || _context->B || (_context->POT1_Y < THRESHOLD);
+    bool isDown = (_context->dpad == 3) || (_context->dpad == 4)|| (_context->dpad == 5) || (_context->POT1_Y > (255 - THRESHOLD));
+    bool isLeft = (_context->dpad == 1) || (_context->dpad == 2)|| (_context->dpad == 3) || (_context->POT1_X < THRESHOLD);
+    bool isRight = (_context->dpad == 5) || (_context->dpad == 6)|| (_context->dpad == 7) || (_context->POT1_X > (255 - THRESHOLD));
+    
+    gpio_put(GPIO_UP, isUp);
+    gpio_put(GPIO_DOWN, isDown);
+    gpio_put(GPIO_LEFT, isLeft);
+    gpio_put(GPIO_RIGHT, isRight);
+    
+    gpio_put(GPIO_FIRE, _context->A);
 
     return true;
 }
