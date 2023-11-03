@@ -48,8 +48,8 @@ bool sampler_callback(repeating_timer_t* rt) {
     // TODO: test this.  add in POT2
     bool isUp = (_context->dpad == 7) || (_context->dpad == 0) || (_context->dpad == 1) || _context->B || (_context->POT1_Y < THRESHOLD);
     bool isDown = (_context->dpad == 3) || (_context->dpad == 4)|| (_context->dpad == 5) || (_context->POT1_Y > (255 - THRESHOLD));
-    bool isLeft = (_context->dpad == 1) || (_context->dpad == 2)|| (_context->dpad == 3) || (_context->POT1_X < THRESHOLD);
-    bool isRight = (_context->dpad == 5) || (_context->dpad == 6)|| (_context->dpad == 7) || (_context->POT1_X > (255 - THRESHOLD));
+    bool isRight = (_context->dpad == 1) || (_context->dpad == 2)|| (_context->dpad == 3) || (_context->POT1_X > (255 - THRESHOLD));
+    bool isLeft = (_context->dpad == 5) || (_context->dpad == 6)|| (_context->dpad == 7) || (_context->POT1_X < THRESHOLD);
     
     gpio_put(GPIO_UP, isUp);
     gpio_put(GPIO_DOWN, isDown);

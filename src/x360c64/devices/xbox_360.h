@@ -11,7 +11,8 @@
 typedef struct TU_ATTR_PACKED {
     // this is "packed".
     // e.g. d-pad is 3 bits of a byte
-
+    // https://learn.microsoft.com/en-us/windows/win32/api/xinput/ns-xinput-xinput_gamepad
+    
     // b0 and b1 are some kind of report
     uint8_t b0, b1;
     
@@ -60,7 +61,6 @@ static uint8_t normalize_dpad(uint8_t xdpad) {
     const uint8_t DOWN = 2;
     const uint8_t LEFT = 4;
     const uint8_t RIGHT = 8;
-
 
     // "normal" dpad is (hat format, 0x08 is released, 0=N, 1=NE, 2=E,
     // 3=SE, 4=S, 5=SW, 6=W, 7=NW)
