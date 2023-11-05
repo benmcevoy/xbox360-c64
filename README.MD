@@ -11,13 +11,12 @@ So far I can read (refer: device.h):
 - xbox 360 wired controller 
 - generic wired switch controller 
 - ps4 ds4
+- GP2040-CE ps4, xinput, arcade, gp2040, durectinput
 
 I cannot read but have on hand to test with:
 
-- GP204-CE fight stick xinput (crashes)
-- GP204-CE ps4 (almost, but dpad is wrong when idle)
-- GP204-CE ps3 directinput
-- GP204-CE nintendo 
+- GP2040-CE ps3 
+- GP2040-CE nintendo 
 - real ps3
 - 8bitdo ultimate
 
@@ -25,11 +24,11 @@ I cannot read but have on hand to test with:
 TODO:
 
 - DONE: read controller via tinyusb
-- dpad is joystick
-- A is fire
-- B is UP
-- Analog stick map to d-pad, with a threshold
-- Web interface to configure? see the pico fight stick
+- DONE: dpad is joystick
+- DONE: A is fire
+- DONE: B is UP
+- DONE: Analog stick map to d-pad, with a threshold
+- NOPE: Web interface to configure? see the pico fight stick
 - NOPE: Analog stick is POTX/POTY - yeah maybe not - got no DAC
 - NOPE: X and Y are c64gs secondary fire? - this I can do
 - DONE: PS4 controller? yep
