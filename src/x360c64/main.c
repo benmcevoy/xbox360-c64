@@ -63,7 +63,7 @@ bool sampler_callback(repeating_timer_t *rt)
 
     _autoFireDelay--;
 
-    bool isAutoFire = _context->X && _autoFireDelay < AUTOFIRE_TRIGGER;
+    bool isAutoFire = (_context->X || _context->Y) && _autoFireDelay < AUTOFIRE_TRIGGER;
 
     if (_autoFireDelay == 0)
         _autoFireDelay = AUTOFIRE_DELAY;
