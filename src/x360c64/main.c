@@ -17,11 +17,11 @@ static JoyPort_t *_context;
 static int hz = 1000;
 static repeating_timer_t _timer;
 
-static const uint GPIO_UP = 4;
-static const uint GPIO_DOWN = 2;
-static const uint GPIO_LEFT = 3;
-static const uint GPIO_RIGHT = 27;
-static const uint GPIO_FIRE = 28;
+static const uint GPIO_LEFT = 2;
+static const uint GPIO_FIRE = 3;
+static const uint GPIO_RIGHT = 4;
+static const uint GPIO_UP = 27;
+static const uint GPIO_DOWN = 28;
 
 static void debug_context()
 {
