@@ -4,6 +4,13 @@ Try and get a USB 360 controller to work on the c64
 
 xinput support is more or less copied from https://github.com/hathach/tinyusb/discussions/1929
 
+DPAD and Right analog stick can be used as joystick.
+
+A is fire.
+
+B is up/jump.
+
+X and Y are autofire.
 
 
 So far I can read (refer: device.h):
@@ -11,7 +18,7 @@ So far I can read (refer: device.h):
 - xbox 360 wired controller 
 - generic wired switch controller 
 - ps4 ds4
-- GP2040-CE ps4, xinput, arcade, gp2040, durectinput
+- GP2040-CE ps4, xinput, arcade, gp2040, directinput
 
 I cannot read but have on hand to test with:
 
@@ -95,7 +102,10 @@ USB controller is plugged directly into the Pico USB port.
 
 Thanks to this, https://www.hackster.io/DocSnyderde/connect-usb-joystick-to-commodore-c64-2fb5ba
 
-The power and joystick headers will be right angled or just solder direct.
+In the current v02 design power is taken direct from the C64 control port. This mean the USB controller is also being powered from the C64. 
+
+Do not plug in the adapter while the power is on.
+
 
 ![Board front](docs/assets/board_front.png?raw=true "Board front")
 
