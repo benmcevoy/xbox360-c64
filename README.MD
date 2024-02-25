@@ -15,6 +15,7 @@ X and Y are autofire.
 
 So far I can read (refer: device.h):
 
+- xbox 360 wireless controller :)
 - xbox 360 wired controller 
 - generic wired switch controller 
 - ps4 ds4
@@ -26,7 +27,6 @@ I cannot read but have on hand to test with:
 - GP2040-CE nintendo 
 - real ps3
 - 8bitdo ultimate
-
 
 TODO:
 
@@ -42,6 +42,7 @@ TODO:
 - DONE: read controller via tinyusb
 
 ## prepare
+
 clone with submodules, e,g,
 
 `git clone --recurse-submodules git://github.com/benmcevoy/xbox360-c64`
