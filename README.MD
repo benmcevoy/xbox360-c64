@@ -64,7 +64,7 @@ export environment variables
 
 ## cmake
 ```
-cd src\build
+cd ./src/build
 # debug build
 cmake ../ -DCMAKE_BUILD_TYPE=Debug
 ```

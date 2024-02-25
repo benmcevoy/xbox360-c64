@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "bsp/board.h"
+#include "bsp/board_api.h"
 #include "devices/controllercontext.h"
 #include "hardware/gpio.h"
 #include "pico/stdlib.h"

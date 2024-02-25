@@ -42,7 +42,10 @@ static inline bool is_ps3(uint16_t vid, uint16_t pid) {
 }
 
 static inline bool is_xbox_360(uint16_t vid, uint16_t pid) {
-    return (vid == 0x045E && pid == 0x028E);
+    return (vid == 0x045E && pid == 0x028E)
+    ||(vid == 0x045E && pid == 0x02E6)
+    ||(vid == 0x045E && pid == 0x02FE)
+    ;
 }
 
 static inline bool is_nintendo_pro(uint16_t vid, uint16_t pid) {
@@ -96,12 +99,7 @@ void x360c64_device_get_report(uint8_t const* report, uint16_t len,
     }
 
     if (device == XBOX_360) {
-        //debug_report(report, len);
         process_xbox_360(report, len, context);
-    }
-
-    if (device == PS3) {
-       debug_report(report, len);
     }
 
     if (device == UNKNOWN) debug_report(report, len);

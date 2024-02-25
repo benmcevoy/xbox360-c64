@@ -36,7 +36,9 @@
 // 1 : print error
 // 2 : print warning
 // 3 : print info
-#define CFG_TUSB_DEBUG  0
+// #define CFG_TUSB_DEBUG  3
+
+#define CFG_TUH_XINPUT 1
 
 //--------------------------------------------------------------------+
 // Board Specific Configuration
@@ -101,7 +103,7 @@
 //--------------------------------------------------------------------
 
 // Size of buffer to hold descriptors and other data used for enumeration
-#define CFG_TUH_ENUMERATION_BUFSIZE 256
+#define CFG_TUH_ENUMERATION_BUFSIZE 400
 
 #define CFG_TUH_HUB                 1 // number of supported hubs
 #define CFG_TUH_CDC                 1 // CDC ACM

@@ -6,9 +6,14 @@ set(TINYUSB_FAMILY_PROJECT_NAME_PREFIX "tinyusb_host_")
 add_executable(${projectName})
 
 target_sources(${projectName} PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}/xinput_host.c
         ${CMAKE_CURRENT_LIST_DIR}/hid_app.c
         ${CMAKE_CURRENT_LIST_DIR}/main.c
         )
+
+# configure UART
+pico_enable_stdio_usb(${projectName} 0)
+pico_enable_stdio_uart(${projectName} 1)
 
 # Make sure TinyUSB can find tusb_config.h
 target_include_directories(${projectName} PUBLIC
