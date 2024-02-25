@@ -48,7 +48,7 @@ bool sampler_callback(repeating_timer_t *rt)
     const uint8_t AUTOFIRE_TRIGGER = 20;
     static uint8_t _autoFireDelay = AUTOFIRE_DELAY;
 
-    debug_context();
+    //debug_context();
 
     // TODO: add in POT2?
     bool isUp = (_context->dpad == 7) || (_context->dpad == 0) || (_context->dpad == 1) || _context->B || (_context->POT1_Y < THRESHOLD);
