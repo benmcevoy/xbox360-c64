@@ -2,7 +2,7 @@
 
 Try and get a USB 360 controller to work on the c64
 
-xinput support is more or less copied from https://github.com/hathach/tinyusb/discussions/1929
+xinput support is from https://github.com/Ryzee119/tusb_xinput
 
 DPAD and Right analog stick can be used as joystick.
 
