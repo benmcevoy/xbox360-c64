@@ -41,6 +41,18 @@ TODO:
 - DONE: PS4 controller? yep
 - DONE: read controller via tinyusb
 
+Things I wish I had done/done differently...
+
+- connect all C64 pins to GPIO, for the POTX/Y as second buttons 
+- use an USB header instead of the pico usb port (as it is a pain and needs an adapter)
+- use the waveshare pico or a "stamp" board" (it's a lot smaller)
+- use the PCB manufacturer to add the transistors and resistors as SMD parts
+- and basically get the size down and remove the need for USB A to micro adapter
+- analog support, either a digital pot or DAC
+- better use of the LED for status
+- some way to configure it? not much to configure, but it would be nice.
+
+
 ## prepare
 
 clone with submodules, e,g,
