@@ -12,11 +12,11 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-const-variable"
 
-//Wired 360 commands
+// Wired 360 commands
 static const uint8_t xbox360_wired_rumble[] = {0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 static const uint8_t xbox360_wired_led[] = {0x01, 0x03, 0x00};
 
-//Xbone one
+// Xbone one
 #define GIP_CMD_ACK 0x01
 #define GIP_CMD_ANNOUNCE 0x02
 #define GIP_CMD_IDENTIFY 0x04
@@ -37,8 +37,8 @@ static const uint8_t xbox360_wired_led[] = {0x01, 0x03, 0x00};
 #define GIP_PWR_RESET 0x07
 #define GIP_LED_ON 0x01
 #define BIT(n) (1UL << (n))
-#define GIP_MOTOR_R  BIT(0)
-#define GIP_MOTOR_L  BIT(1)
+#define GIP_MOTOR_R BIT(0)
+#define GIP_MOTOR_L BIT(1)
 #define GIP_MOTOR_RT BIT(2)
 #define GIP_MOTOR_LT BIT(3)
 #define GIP_MOTOR_ALL (GIP_MOTOR_R | GIP_MOTOR_L | GIP_MOTOR_RT | GIP_MOTOR_LT)
@@ -50,9 +50,9 @@ static const uint8_t xboxone_pdp_led_on[] = {GIP_CMD_LED, GIP_OPT_INTERNAL, GIP_
 static const uint8_t xboxone_pdp_auth[] = {GIP_CMD_AUTHENTICATE, GIP_OPT_INTERNAL, GIP_SEQ0, GIP_PL_LEN(2), 0x01, 0x00};
 static const uint8_t xboxone_rumble[] = {GIP_CMD_RUMBLE, 0x00, 0x00, GIP_PL_LEN(9), 0x00, GIP_MOTOR_ALL, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00, 0xFF};
 
-//Wireless 360 commands
+// Wireless 360 commands
 static const uint8_t xbox360w_led[] = {0x00, 0x00, 0x08, 0x40};
-//Sending 0x00, 0x00, 0x08, 0x00 will permanently disable rumble until you do this:
+// Sending 0x00, 0x00, 0x08, 0x00 will permanently disable rumble until you do this:
 static const uint8_t xbox360w_rumble_enable[] = {0x00, 0x00, 0x08, 0x01};
 static const uint8_t xbox360w_rumble[] = {0x00, 0x01, 0x0F, 0xC0, 0x00, 0x00};
 static const uint8_t xbox360w_inquire_present[] = {0x08, 0x00, 0x0F, 0xC0};
@@ -63,7 +63,7 @@ static const uint8_t xbox360w_chatpad_init[] = {0x00, 0x00, 0x0C, 0x1B};
 static const uint8_t xbox360w_chatpad_keepalive1[] = {0x00, 0x00, 0x0C, 0x1F};
 static const uint8_t xbox360w_chatpad_keepalive2[] = {0x00, 0x00, 0x0C, 0x1E};
 
-//Original Xbox
+// Original Xbox
 static const uint8_t xboxog_rumble[] = {0x00, 0x06, 0x00, 0x00, 0x00, 0x00};
 
 #pragma GCC diagnostic pop
@@ -118,7 +118,7 @@ static void wait_for_tx_complete(uint8_t dev_addr, uint8_t ep_out)
         tuh_task();
 }
 
-static void xboxone_init( xinputh_interface_t *xid_itf, uint8_t dev_addr, uint8_t instance)
+static void xboxone_init(xinputh_interface_t *xid_itf, uint8_t dev_addr, uint8_t instance)
 {
     uint16_t PID, VID;
     tuh_vid_pid_get(dev_addr, &VID, &PID);
@@ -134,7 +134,7 @@ static void xboxone_init( xinputh_interface_t *xid_itf, uint8_t dev_addr, uint8_
         wait_for_tx_complete(dev_addr, xid_itf->ep_out);
     }
 
-    //Required for PDP aftermarket controllers
+    // Required for PDP aftermarket controllers
     if (VID == 0x0e6f)
     {
         tuh_xinput_send_report(dev_addr, instance, xboxone_pdp_led_on, sizeof(xboxone_pdp_led_on));
@@ -149,7 +149,7 @@ bool tuh_xinput_receive_report(uint8_t dev_addr, uint8_t instance)
     xinputh_interface_t *xid_itf = get_instance(dev_addr, instance);
     TU_VERIFY(usbh_edpt_claim(dev_addr, xid_itf->ep_in));
 
-    if ( !usbh_edpt_xfer(dev_addr, xid_itf->ep_in, xid_itf->epin_buf, xid_itf->epin_size) )
+    if (!usbh_edpt_xfer(dev_addr, xid_itf->ep_in, xid_itf->epin_buf, xid_itf->epin_size))
     {
         usbh_edpt_release(dev_addr, xid_itf->ep_in);
         return false;
@@ -166,7 +166,7 @@ bool tuh_xinput_send_report(uint8_t dev_addr, uint8_t instance, const uint8_t *t
 
     memcpy(xid_itf->epout_buf, txbuf, len);
 
-    if ( !usbh_edpt_xfer(dev_addr, xid_itf->ep_out, xid_itf->epout_buf, len))
+    if (!usbh_edpt_xfer(dev_addr, xid_itf->ep_out, xid_itf->epout_buf, len))
     {
         usbh_edpt_release(dev_addr, xid_itf->ep_out);
         return false;
@@ -262,17 +262,17 @@ bool xinputh_open(uint8_t rhport, uint8_t dev_addr, tusb_desc_interface_t const 
     xinput_type_t type = XINPUT_UNKNOWN;
     if (desc_itf->bNumEndpoints < 2)
         type = XINPUT_UNKNOWN;
-    else if (desc_itf->bInterfaceSubClass == 0x5D && //Xbox360 wireless bInterfaceSubClass
-             desc_itf->bInterfaceProtocol == 0x81)   //Xbox360 wireless bInterfaceProtocol
+    else if (desc_itf->bInterfaceSubClass == 0x5D && // Xbox360 wireless bInterfaceSubClass
+             desc_itf->bInterfaceProtocol == 0x81)   // Xbox360 wireless bInterfaceProtocol
         type = XBOX360_WIRELESS;
-    else if (desc_itf->bInterfaceSubClass == 0x5D && //Xbox360 wired bInterfaceSubClass
-             desc_itf->bInterfaceProtocol == 0x01)   //Xbox360 wired bInterfaceProtocol
+    else if (desc_itf->bInterfaceSubClass == 0x5D && // Xbox360 wired bInterfaceSubClass
+             desc_itf->bInterfaceProtocol == 0x01)   // Xbox360 wired bInterfaceProtocol
         type = XBOX360_WIRED;
-    else if (desc_itf->bInterfaceSubClass == 0x47 && //Xbone and SX bInterfaceSubClass
-             desc_itf->bInterfaceProtocol == 0xD0)   //Xbone and SX bInterfaceProtocol
+    else if (desc_itf->bInterfaceSubClass == 0x47 && // Xbone and SX bInterfaceSubClass
+             desc_itf->bInterfaceProtocol == 0xD0)   // Xbone and SX bInterfaceProtocol
         type = XBOXONE;
-    else if (desc_itf->bInterfaceClass == 0x58 &&  //XboxOG bInterfaceClass
-             desc_itf->bInterfaceSubClass == 0x42) //XboxOG bInterfaceSubClass
+    else if (desc_itf->bInterfaceClass == 0x58 &&  // XboxOG bInterfaceClass
+             desc_itf->bInterfaceSubClass == 0x42) // XboxOG bInterfaceSubClass
         type = XBOXOG;
 
     if (type == XINPUT_UNKNOWN)
@@ -290,7 +290,7 @@ bool xinputh_open(uint8_t rhport, uint8_t dev_addr, tusb_desc_interface_t const 
     xid_itf->itf_num = desc_itf->bInterfaceNumber;
     xid_itf->type = type;
 
-    //Parse descriptor for all endpoints and open them
+    // Parse descriptor for all endpoints and open them
     uint8_t const *p_desc = (uint8_t const *)desc_itf;
     int endpoint = 0;
     int pos = 0;
@@ -332,7 +332,7 @@ bool xinputh_set_config(uint8_t dev_addr, uint8_t itf_num)
 
     if (xid_itf->type == XBOX360_WIRELESS)
     {
-        //Wireless controllers may not be connected yet.
+        // Wireless controllers may not be connected yet.
         xid_itf->connected = false;
         tuh_xinput_send_report(dev_addr, instance, xbox360w_inquire_present, sizeof(xbox360w_inquire_present));
         wait_for_tx_complete(dev_addr, xid_itf->ep_out);
@@ -384,46 +384,61 @@ bool xinputh_xfer_cb(uint8_t dev_addr, uint8_t ep_addr, xfer_result_t result, ui
         TU_LOG2("Get Report callback (%u, %u, %u bytes)\r\n", dev_addr, instance, xferred_bytes);
         if (xid_itf->type == XBOX360_WIRED)
         {
-            #define GET_USHORT(a) (uint16_t)((a)[1] << 8 | (a)[0])
-            #define GET_SHORT(a) ((int16_t)GET_USHORT(a))
+#define GET_USHORT(a) (uint16_t)((a)[1] << 8 | (a)[0])
+#define GET_SHORT(a) ((int16_t)GET_USHORT(a))
             if (rdata[1] == 0x14)
             {
                 tu_memclr(pad, sizeof(xinput_gamepad_t));
                 uint16_t wButtons = rdata[3] << 8 | rdata[2];
 
-                //Map digital buttons
-                if (wButtons & (1 << 0)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_UP;
-                if (wButtons & (1 << 1)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;
-                if (wButtons & (1 << 2)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;
-                if (wButtons & (1 << 3)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;
-                if (wButtons & (1 << 4)) pad->wButtons |= XINPUT_GAMEPAD_START;
-                if (wButtons & (1 << 5)) pad->wButtons |= XINPUT_GAMEPAD_BACK;
-                if (wButtons & (1 << 6)) pad->wButtons |= XINPUT_GAMEPAD_LEFT_THUMB;
-                if (wButtons & (1 << 7)) pad->wButtons |= XINPUT_GAMEPAD_RIGHT_THUMB;
-                if (wButtons & (1 << 8)) pad->wButtons |= XINPUT_GAMEPAD_LEFT_SHOULDER;
-                if (wButtons & (1 << 9)) pad->wButtons |= XINPUT_GAMEPAD_RIGHT_SHOULDER;
-                if (wButtons & (1 << 10)) pad->wButtons |= XINPUT_GAMEPAD_GUIDE;
-                if (wButtons & (1 << 12)) pad->wButtons |= XINPUT_GAMEPAD_A;
-                if (wButtons & (1 << 13)) pad->wButtons |= XINPUT_GAMEPAD_B;
-                if (wButtons & (1 << 14)) pad->wButtons |= XINPUT_GAMEPAD_X;
-                if (wButtons & (1 << 15)) pad->wButtons |= XINPUT_GAMEPAD_Y;
+                // Map digital buttons
+                if (wButtons & (1 << 0))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_UP;
+                if (wButtons & (1 << 1))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;
+                if (wButtons & (1 << 2))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;
+                if (wButtons & (1 << 3))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;
+                if (wButtons & (1 << 4))
+                    pad->wButtons |= XINPUT_GAMEPAD_START;
+                if (wButtons & (1 << 5))
+                    pad->wButtons |= XINPUT_GAMEPAD_BACK;
+                if (wButtons & (1 << 6))
+                    pad->wButtons |= XINPUT_GAMEPAD_LEFT_THUMB;
+                if (wButtons & (1 << 7))
+                    pad->wButtons |= XINPUT_GAMEPAD_RIGHT_THUMB;
+                if (wButtons & (1 << 8))
+                    pad->wButtons |= XINPUT_GAMEPAD_LEFT_SHOULDER;
+                if (wButtons & (1 << 9))
+                    pad->wButtons |= XINPUT_GAMEPAD_RIGHT_SHOULDER;
+                if (wButtons & (1 << 10))
+                    pad->wButtons |= XINPUT_GAMEPAD_GUIDE;
+                if (wButtons & (1 << 12))
+                    pad->wButtons |= XINPUT_GAMEPAD_A;
+                if (wButtons & (1 << 13))
+                    pad->wButtons |= XINPUT_GAMEPAD_B;
+                if (wButtons & (1 << 14))
+                    pad->wButtons |= XINPUT_GAMEPAD_X;
+                if (wButtons & (1 << 15))
+                    pad->wButtons |= XINPUT_GAMEPAD_Y;
 
-                //Map the left and right triggers
+                // Map the left and right triggers
                 pad->bLeftTrigger = rdata[4];
                 pad->bRightTrigger = rdata[5];
 
-                //Map analog sticks
+                // Map analog sticks
                 pad->sThumbLX = rdata[7] << 8 | rdata[6];
                 pad->sThumbLY = rdata[9] << 8 | rdata[8];
                 pad->sThumbRX = rdata[11] << 8 | rdata[10];
                 pad->sThumbRY = rdata[13] << 8 | rdata[12];
 
                 xid_itf->new_pad_data = true;
-            }           
+            }
         }
         else if (xid_itf->type == XBOX360_WIRELESS)
         {
-            //Connect/Disconnect packet
+            // Connect/Disconnect packet
             if (rdata[0] & 0x08)
             {
                 if (rdata[1] != 0x00 && xid_itf->connected == false)
@@ -438,33 +453,47 @@ bool xinputh_xfer_cb(uint8_t dev_addr, uint8_t ep_addr, xfer_result_t result, ui
                 }
             }
 
-            //Button status packet
+            // Button status packet
             if ((rdata[1] & 1) && rdata[5] == 0x13)
             {
                 tu_memclr(pad, sizeof(xinput_gamepad_t));
                 uint16_t wButtons = rdata[7] << 8 | rdata[6];
 
-                //Map digital buttons
-                if (wButtons & (1 << 0)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_UP;
-                if (wButtons & (1 << 1)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;
-                if (wButtons & (1 << 2)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;
-                if (wButtons & (1 << 3)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;
-                if (wButtons & (1 << 4)) pad->wButtons |= XINPUT_GAMEPAD_START;
-                if (wButtons & (1 << 5)) pad->wButtons |= XINPUT_GAMEPAD_BACK;
-                if (wButtons & (1 << 6)) pad->wButtons |= XINPUT_GAMEPAD_LEFT_THUMB;
-                if (wButtons & (1 << 7)) pad->wButtons |= XINPUT_GAMEPAD_RIGHT_THUMB;
-                if (wButtons & (1 << 8)) pad->wButtons |= XINPUT_GAMEPAD_LEFT_SHOULDER;
-                if (wButtons & (1 << 9)) pad->wButtons |= XINPUT_GAMEPAD_RIGHT_SHOULDER;
-                if (wButtons & (1 << 12)) pad->wButtons |= XINPUT_GAMEPAD_A;
-                if (wButtons & (1 << 13)) pad->wButtons |= XINPUT_GAMEPAD_B;
-                if (wButtons & (1 << 14)) pad->wButtons |= XINPUT_GAMEPAD_X;
-                if (wButtons & (1 << 15)) pad->wButtons |= XINPUT_GAMEPAD_Y;
+                // Map digital buttons
+                if (wButtons & (1 << 0))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_UP;
+                if (wButtons & (1 << 1))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;
+                if (wButtons & (1 << 2))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;
+                if (wButtons & (1 << 3))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;
+                if (wButtons & (1 << 4))
+                    pad->wButtons |= XINPUT_GAMEPAD_START;
+                if (wButtons & (1 << 5))
+                    pad->wButtons |= XINPUT_GAMEPAD_BACK;
+                if (wButtons & (1 << 6))
+                    pad->wButtons |= XINPUT_GAMEPAD_LEFT_THUMB;
+                if (wButtons & (1 << 7))
+                    pad->wButtons |= XINPUT_GAMEPAD_RIGHT_THUMB;
+                if (wButtons & (1 << 8))
+                    pad->wButtons |= XINPUT_GAMEPAD_LEFT_SHOULDER;
+                if (wButtons & (1 << 9))
+                    pad->wButtons |= XINPUT_GAMEPAD_RIGHT_SHOULDER;
+                if (wButtons & (1 << 12))
+                    pad->wButtons |= XINPUT_GAMEPAD_A;
+                if (wButtons & (1 << 13))
+                    pad->wButtons |= XINPUT_GAMEPAD_B;
+                if (wButtons & (1 << 14))
+                    pad->wButtons |= XINPUT_GAMEPAD_X;
+                if (wButtons & (1 << 15))
+                    pad->wButtons |= XINPUT_GAMEPAD_Y;
 
-                //Map the left and right triggers
+                // Map the left and right triggers
                 pad->bLeftTrigger = rdata[8];
                 pad->bRightTrigger = rdata[9];
 
-                //Map analog sticks
+                // Map analog sticks
                 pad->sThumbLX = rdata[11] << 8 | rdata[10];
                 pad->sThumbLY = rdata[13] << 8 | rdata[12];
                 pad->sThumbRX = rdata[15] << 8 | rdata[14];
@@ -480,28 +509,43 @@ bool xinputh_xfer_cb(uint8_t dev_addr, uint8_t ep_addr, xfer_result_t result, ui
                 tu_memclr(pad, sizeof(xinput_gamepad_t));
                 uint16_t wButtons = rdata[5] << 8 | rdata[4];
 
-                //Map digital buttons
-                if (wButtons & (1 << 8)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_UP;
-                if (wButtons & (1 << 9)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;
-                if (wButtons & (1 << 10)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;
-                if (wButtons & (1 << 11)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;
-                if (wButtons & (1 << 2)) pad->wButtons |= XINPUT_GAMEPAD_START;
-                if (wButtons & (1 << 3)) pad->wButtons |= XINPUT_GAMEPAD_BACK;
-                if (wButtons & (1 << 14)) pad->wButtons |= XINPUT_GAMEPAD_LEFT_THUMB;
-                if (wButtons & (1 << 15)) pad->wButtons |= XINPUT_GAMEPAD_RIGHT_THUMB;
-                if (wButtons & (1 << 12)) pad->wButtons |= XINPUT_GAMEPAD_LEFT_SHOULDER;
-                if (wButtons & (1 << 13)) pad->wButtons |= XINPUT_GAMEPAD_RIGHT_SHOULDER;
-                if (wButtons & (1 << 4)) pad->wButtons |= XINPUT_GAMEPAD_A;
-                if (wButtons & (1 << 5)) pad->wButtons |= XINPUT_GAMEPAD_B;
-                if (wButtons & (1 << 6)) pad->wButtons |= XINPUT_GAMEPAD_X;
-                if (wButtons & (1 << 7)) pad->wButtons |= XINPUT_GAMEPAD_Y;
-                if (rdata[22] && 0x01) pad->wButtons   |= XINPUT_GAMEPAD_SHARE;
+                // Map digital buttons
+                if (wButtons & (1 << 8))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_UP;
+                if (wButtons & (1 << 9))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;
+                if (wButtons & (1 << 10))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;
+                if (wButtons & (1 << 11))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;
+                if (wButtons & (1 << 2))
+                    pad->wButtons |= XINPUT_GAMEPAD_START;
+                if (wButtons & (1 << 3))
+                    pad->wButtons |= XINPUT_GAMEPAD_BACK;
+                if (wButtons & (1 << 14))
+                    pad->wButtons |= XINPUT_GAMEPAD_LEFT_THUMB;
+                if (wButtons & (1 << 15))
+                    pad->wButtons |= XINPUT_GAMEPAD_RIGHT_THUMB;
+                if (wButtons & (1 << 12))
+                    pad->wButtons |= XINPUT_GAMEPAD_LEFT_SHOULDER;
+                if (wButtons & (1 << 13))
+                    pad->wButtons |= XINPUT_GAMEPAD_RIGHT_SHOULDER;
+                if (wButtons & (1 << 4))
+                    pad->wButtons |= XINPUT_GAMEPAD_A;
+                if (wButtons & (1 << 5))
+                    pad->wButtons |= XINPUT_GAMEPAD_B;
+                if (wButtons & (1 << 6))
+                    pad->wButtons |= XINPUT_GAMEPAD_X;
+                if (wButtons & (1 << 7))
+                    pad->wButtons |= XINPUT_GAMEPAD_Y;
+                if (rdata[22] && 0x01)
+                    pad->wButtons |= XINPUT_GAMEPAD_SHARE;
 
-                //Map the left and right triggers
+                // Map the left and right triggers
                 pad->bLeftTrigger = (rdata[7] << 8 | rdata[6]) >> 2;
                 pad->bRightTrigger = (rdata[9] << 8 | rdata[8]) >> 2;
 
-                //Map analog sticks
+                // Map analog sticks
                 pad->sThumbLX = rdata[11] << 8 | rdata[10];
                 pad->sThumbLY = rdata[13] << 8 | rdata[12];
                 pad->sThumbRX = rdata[15] << 8 | rdata[14];
@@ -511,11 +555,13 @@ bool xinputh_xfer_cb(uint8_t dev_addr, uint8_t ep_addr, xfer_result_t result, ui
             }
             else if (rdata[0] == GIP_CMD_VIRTUAL_KEY)
             {
-                if (rdata[4] == 0x01 && !(pad->wButtons & XINPUT_GAMEPAD_GUIDE)) {
+                if (rdata[4] == 0x01 && !(pad->wButtons & XINPUT_GAMEPAD_GUIDE))
+                {
                     xid_itf->new_pad_data = true;
                     pad->wButtons |= XINPUT_GAMEPAD_GUIDE;
                 }
-                else if (rdata[4] == 0x00 && (pad->wButtons & XINPUT_GAMEPAD_GUIDE)) {
+                else if (rdata[4] == 0x00 && (pad->wButtons & XINPUT_GAMEPAD_GUIDE))
+                {
                     xid_itf->new_pad_data = true;
                     pad->wButtons &= ~XINPUT_GAMEPAD_GUIDE;
                 }
@@ -532,28 +578,42 @@ bool xinputh_xfer_cb(uint8_t dev_addr, uint8_t ep_addr, xfer_result_t result, ui
                 tu_memclr(pad, sizeof(xinput_gamepad_t));
                 uint16_t wButtons = rdata[3] << 8 | rdata[2];
 
-                //Map digital buttons
-                if (wButtons & (1 << 0)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_UP;
-                if (wButtons & (1 << 1)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;
-                if (wButtons & (1 << 2)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;
-                if (wButtons & (1 << 3)) pad->wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;
-                if (wButtons & (1 << 4)) pad->wButtons |= XINPUT_GAMEPAD_START;
-                if (wButtons & (1 << 5)) pad->wButtons |= XINPUT_GAMEPAD_BACK;
-                if (wButtons & (1 << 6)) pad->wButtons |= XINPUT_GAMEPAD_LEFT_THUMB;
-                if (wButtons & (1 << 7)) pad->wButtons |= XINPUT_GAMEPAD_RIGHT_THUMB;
+                // Map digital buttons
+                if (wButtons & (1 << 0))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_UP;
+                if (wButtons & (1 << 1))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;
+                if (wButtons & (1 << 2))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;
+                if (wButtons & (1 << 3))
+                    pad->wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;
+                if (wButtons & (1 << 4))
+                    pad->wButtons |= XINPUT_GAMEPAD_START;
+                if (wButtons & (1 << 5))
+                    pad->wButtons |= XINPUT_GAMEPAD_BACK;
+                if (wButtons & (1 << 6))
+                    pad->wButtons |= XINPUT_GAMEPAD_LEFT_THUMB;
+                if (wButtons & (1 << 7))
+                    pad->wButtons |= XINPUT_GAMEPAD_RIGHT_THUMB;
 
-                if (rdata[4] > 0x20) pad->wButtons |= XINPUT_GAMEPAD_A;
-                if (rdata[5] > 0x20) pad->wButtons |= XINPUT_GAMEPAD_B;
-                if (rdata[6] > 0x20) pad->wButtons |= XINPUT_GAMEPAD_X;
-                if (rdata[7] > 0x20) pad->wButtons |= XINPUT_GAMEPAD_Y;
-                if (rdata[8] > 0x20) pad->wButtons |= XINPUT_GAMEPAD_RIGHT_SHOULDER;
-                if (rdata[9] > 0x20) pad->wButtons |= XINPUT_GAMEPAD_LEFT_SHOULDER;
+                if (rdata[4] > 0x20)
+                    pad->wButtons |= XINPUT_GAMEPAD_A;
+                if (rdata[5] > 0x20)
+                    pad->wButtons |= XINPUT_GAMEPAD_B;
+                if (rdata[6] > 0x20)
+                    pad->wButtons |= XINPUT_GAMEPAD_X;
+                if (rdata[7] > 0x20)
+                    pad->wButtons |= XINPUT_GAMEPAD_Y;
+                if (rdata[8] > 0x20)
+                    pad->wButtons |= XINPUT_GAMEPAD_RIGHT_SHOULDER;
+                if (rdata[9] > 0x20)
+                    pad->wButtons |= XINPUT_GAMEPAD_LEFT_SHOULDER;
 
-                //Map the left and right triggers
+                // Map the left and right triggers
                 pad->bLeftTrigger = rdata[10];
                 pad->bRightTrigger = rdata[11];
 
-                //Map analog sticks
+                // Map analog sticks
                 pad->sThumbLX = rdata[13] << 8 | rdata[12];
                 pad->sThumbLY = rdata[15] << 8 | rdata[14];
                 pad->sThumbRX = rdata[17] << 8 | rdata[16];
@@ -566,7 +626,9 @@ bool xinputh_xfer_cb(uint8_t dev_addr, uint8_t ep_addr, xfer_result_t result, ui
         {
             tuh_xinput_report_received_cb(dev_addr, instance, xid_itf, sizeof(xinputh_interface_t));
             xid_itf->new_pad_data = false;
-        } else {
+        }
+        else
+        {
             tuh_xinput_receive_report(dev_addr, instance);
         }
     }
@@ -598,20 +660,19 @@ void xinputh_close(uint8_t dev_addr)
 
 #ifndef DRIVER_NAME
 #if CFG_TUSB_DEBUG >= CFG_TUH_LOG_LEVEL
-  #define DRIVER_NAME(_name)    .name = _name,
+#define DRIVER_NAME(_name) .name = _name,
 #else
-  #define DRIVER_NAME(_name)
+#define DRIVER_NAME(_name)
 #endif
 #endif
 
 usbh_class_driver_t const usbh_xinput_driver =
-{
-    DRIVER_NAME("XINPUT")
-    .init       = xinputh_init,
-    .open       = xinputh_open,
-    .set_config = xinputh_set_config,
-    .xfer_cb    = xinputh_xfer_cb,
-    .close      = xinputh_close
-};
+    {
+        DRIVER_NAME("XINPUT")
+            .init = xinputh_init,
+        .open = xinputh_open,
+        .set_config = xinputh_set_config,
+        .xfer_cb = xinputh_xfer_cb,
+        .close = xinputh_close};
 
 #endif

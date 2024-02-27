@@ -8,14 +8,16 @@
 #include "controllercontext.h"
 #include "tusb.h"
 
-typedef struct TU_ATTR_PACKED {
+typedef struct TU_ATTR_PACKED
+{
     // this is "packed".
     // e.g. d-pad is 3 bits of a byte
 
     // b0: buttons =  A:1, B:2, x:4, rt: 128, lt: 64
     // b1: buttons: +:8 -:4 zr:2 zl:1, left analog stick push: 32  right analog
     // stick push: 64
-    struct {
+    struct
+    {
         uint8_t A : 1;
         uint8_t B : 1;
         uint8_t X : 1;
@@ -25,7 +27,8 @@ typedef struct TU_ATTR_PACKED {
         uint8_t LT : 1;
     };
 
-    struct {
+    struct
+    {
         uint8_t ZL : 1;
         uint8_t ZR : 1;
         uint8_t minus : 1;
@@ -37,10 +40,11 @@ typedef struct TU_ATTR_PACKED {
     };
 
     // byte 2 is d-pad
-    struct {
-        uint8_t dpad : 4;     // (hat format, 0x08 is released, 0=N, 1=NE, 2=E,
-                              // 3=SE, 4=S, 5=SW, 6=W, 7=NW)
-        uint8_t ignore3 : 4;  // not used
+    struct
+    {
+        uint8_t dpad : 4;    // (hat format, 0x08 is released, 0=N, 1=NE, 2=E,
+                             // 3=SE, 4=S, 5=SW, 6=W, 7=NW)
+        uint8_t ignore3 : 4; // not used
     };
 
     // analog sticks
@@ -56,7 +60,8 @@ typedef struct TU_ATTR_PACKED {
 } nintendo_report_t;
 
 static void process_nintendo_pro(uint8_t const *report, uint16_t len,
-                          JoyPort_t *joyPortState) {
+                                 JoyPort_t *joyPortState)
+{
     nintendo_report_t deviceReport;
     memcpy(&deviceReport, report, sizeof(deviceReport));
 
@@ -68,20 +73,24 @@ static void process_nintendo_pro(uint8_t const *report, uint16_t len,
     joyPortState->Y = deviceReport.X;
 
     if (hasChanged(joyPortState->POT1_X,
-                    deviceReport.left_analog_left_right)) {
+                   deviceReport.left_analog_left_right))
+    {
         joyPortState->POT1_X = deviceReport.left_analog_left_right;
     }
 
-    if (hasChanged(joyPortState->POT1_Y, deviceReport.left_analog_up_down)) {
+    if (hasChanged(joyPortState->POT1_Y, deviceReport.left_analog_up_down))
+    {
         joyPortState->POT1_Y = deviceReport.left_analog_up_down;
     }
 
     if (hasChanged(joyPortState->POT2_X,
-                    deviceReport.right_analog_left_right)) {
+                   deviceReport.right_analog_left_right))
+    {
         joyPortState->POT2_X = deviceReport.right_analog_left_right;
     }
 
-    if (hasChanged(joyPortState->POT2_Y, deviceReport.right_analog_up_down)) {
+    if (hasChanged(joyPortState->POT2_Y, deviceReport.right_analog_up_down))
+    {
         joyPortState->POT2_Y = deviceReport.right_analog_up_down;
     }
 }

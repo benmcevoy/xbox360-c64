@@ -5,7 +5,9 @@
         "hid_host.h": "c",
         "controllercontext.h": "c",
         "tusb.h": "c",
-        "gpio.h": "c"
+        "gpio.h": "c",
+        "stdlib.h": "c",
+        "xinput_host.h": "c"
     },
     "cmake.statusbar.advanced": {
         "debug": {

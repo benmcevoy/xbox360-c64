@@ -6,9 +6,11 @@
 #include <stdlib.h>
 #include "tusb.h"
 
-typedef struct TU_ATTR_PACKED {
+typedef struct TU_ATTR_PACKED
+{
     // buttons  XBOBX style not nintendo
-    struct {
+    struct
+    {
         // primary fire
         uint8_t A : 1;
         uint8_t B : 1;
@@ -28,6 +30,5 @@ typedef struct TU_ATTR_PACKED {
 
 static uint8_t _threshold = 3;
 static bool hasChanged(uint8_t x, uint8_t y) { return (x - y > _threshold) || (y - x > _threshold); }
-
 
 #endif
