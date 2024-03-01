@@ -26,6 +26,8 @@ typedef struct TU_ATTR_PACKED
     // housekeeping
     uint8_t counter;
 
+    bool IsConnected;
+
 } JoyPort_t;
 
 static uint8_t _threshold = 3;

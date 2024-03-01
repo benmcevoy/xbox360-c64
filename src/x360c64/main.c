@@ -73,9 +73,14 @@ bool sampler_callback(repeating_timer_t *rt)
     return true;
 }
 
-void blink_led(void)
+void blink_led(bool isConnected)
 {
-    const uint32_t interval_ms = 1000;
+    if(isConnected){
+        board_led_write(true);
+        return;
+    }
+
+    const uint32_t interval_ms = 250;
     static uint32_t start_ms = 0;
 
     static bool led_state = false;
@@ -101,6 +106,7 @@ void context_init()
     _context->POT1_Y = 128;
     _context->POT2_X = 128;
     _context->POT2_Y = 128;
+    _context->IsConnected = false;
 }
 
 void sampler_init()
@@ -152,7 +158,7 @@ int main(void)
     {
         // TODO: can something go on the other core? gpio timer?
         tuh_task();
-        blink_led();
+        blink_led(_context->IsConnected);
         hid_app_task();
     }
 
@@ -162,9 +168,11 @@ int main(void)
 void tuh_mount_cb(uint8_t dev_addr)
 {
     printf("A device with address %d is mounted\r\n", dev_addr);
+    _context->IsConnected = true;
 }
 
 void tuh_umount_cb(uint8_t dev_addr)
 {
     printf("A device with address %d is unmounted \r\n", dev_addr);
+    _context->IsConnected = false;
 }
