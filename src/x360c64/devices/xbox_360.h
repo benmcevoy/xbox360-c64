@@ -104,6 +104,11 @@ static inline uint8_t scale(int16_t value)
     return (value / 256) + 128;
 }
 
+static inline bool is_xbox_360(uint16_t vid, uint16_t pid) {
+  return (vid == 0x045E && pid == 0x028E) || (vid == 0x045E && pid == 0x02E6) ||
+         (vid == 0x045E && pid == 0x02FE);
+}
+
 static void process_xbox_360(uint8_t const *report, uint16_t len,
                              JoyPort_t *joyPortState)
 {

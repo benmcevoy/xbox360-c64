@@ -20,6 +20,7 @@ So far I can read (refer: device.h):
 - generic wired switch controller 
 - ps4 ds4
 - GP2040-CE ps4, xinput, arcade, gp2040, directinput
+- various mice, but as there is no DAC not much we can do with it... yet.  I would like to emulate a CBM 1351.
 
 I cannot read but have on hand to test with:
 

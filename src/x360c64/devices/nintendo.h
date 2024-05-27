@@ -59,6 +59,23 @@ typedef struct TU_ATTR_PACKED
 
 } nintendo_report_t;
 
+static inline bool is_nintendo_pro(uint16_t vid, uint16_t pid) {
+  return ((vid == 0x057e && pid == 0x2009)  // nin switch controller/pro
+  );
+}
+
+static inline bool is_nintendo(uint16_t vid, uint16_t pid) {
+  // my kmart/anko controller reports itself as many things
+  return (is_nintendo_pro(vid, pid) ||
+          (vid == 0x2563 && pid == 0x0575)  // Shenzhen Wired Controller
+          ||
+          (vid == 0x20BC && pid == 0x5500)  // Guangzhou P frostbite controller
+          || (vid == 0x0F0D && pid == 0x00C1)  // Horipad
+          || (vid == 0x0F0D && pid == 0x0092)  // Horpad pokken
+          || (vid == 0x2563 && pid == 0x0575)  // ZD-V+ Wired Gaming Controller
+  );
+}
+
 static void process_nintendo_pro(uint8_t const *report, uint16_t len,
                                  JoyPort_t *joyPortState)
 {

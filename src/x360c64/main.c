@@ -9,12 +9,11 @@
 #include "tusb.h"
 
 extern void hid_app_init(JoyPort_t *);
-extern void hid_app_task(void);
 
 // this is global context
 static JoyPort_t *_context;
 
-static int hz = 1000;
+static int hz = 2000;
 static repeating_timer_t _timer;
 
 static const uint GPIO_LEFT = 2;
@@ -26,17 +25,18 @@ static const uint GPIO_DOWN = 28;
 static void debug_context()
 {
     // slow this down to a reasonable level for stdio
-    static uint8_t delay = 100;
+    const uint16_t DELAY = 2000;
+    static uint16_t delay = DELAY;
 
     delay--;
 
     if (delay == 0)
     {
-        delay = 100;
+        delay = DELAY;
         printf("DPAD:%03u A:%03u B:%03u X:%03u Y:%03u POT1_X:%03u POT1_Y:%03u POT2_X:%03u POT2_Y:%03u", _context->dpad, _context->A,
                _context->B, _context->X, _context->Y, _context->POT1_X, _context->POT1_Y, _context->POT2_X, _context->POT2_Y);
 
-        printf("\r");
+        printf("\r\n");
         fflush(stdout);
     }
 }
@@ -48,7 +48,7 @@ bool sampler_callback(repeating_timer_t *rt)
     const uint8_t AUTOFIRE_TRIGGER = 20;
     static uint8_t _autoFireDelay = AUTOFIRE_DELAY;
 
-    // debug_context();
+    //debug_context();
 
     // TODO: add in POT2?
     bool isUp = (_context->dpad == 7) || (_context->dpad == 0) || (_context->dpad == 1) || _context->B || (_context->POT1_Y < THRESHOLD);
@@ -156,23 +156,9 @@ int main(void)
 
     while (1)
     {
-        // TODO: can something go on the other core? gpio timer?
         tuh_task();
         blink_led(_context->IsConnected);
-        hid_app_task();
     }
 
     return 0;
-}
-
-void tuh_mount_cb(uint8_t dev_addr)
-{
-    printf("A device with address %d is mounted\r\n", dev_addr);
-    _context->IsConnected = true;
-}
-
-void tuh_umount_cb(uint8_t dev_addr)
-{
-    printf("A device with address %d is unmounted \r\n", dev_addr);
-    _context->IsConnected = false;
 }

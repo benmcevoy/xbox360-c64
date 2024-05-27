@@ -6,9 +6,19 @@
 #include <stdlib.h>
 #include "tusb.h"
 
+// enum for known devices
+typedef enum Device {
+  UNKNOWN = 0,
+  PS4,
+  NINTENDO,
+  XBOX_360,
+  PS3,
+  MOUSE
+} Device_t;
+
 typedef struct TU_ATTR_PACKED
 {
-    // buttons  XBOBX style not nintendo
+    // buttons XBOX style not nintendo
     struct
     {
         // primary fire
@@ -27,7 +37,7 @@ typedef struct TU_ATTR_PACKED
     uint8_t counter;
 
     bool IsConnected;
-
+    Device_t Device;
 } JoyPort_t;
 
 static uint8_t _threshold = 3;

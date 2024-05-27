@@ -56,6 +56,19 @@ typedef struct TU_ATTR_PACKED
 
 } sony_ds4_report_t;
 
+
+static inline bool is_sony_ds4(uint16_t vid, uint16_t pid) {
+  return (
+      (vid == 0x054c && (pid == 0x09cc || pid == 0x05c4))  // Sony DualShock4
+      || (vid == 0x0f0d && pid == 0x005e)                  // Hori FC4
+      || (vid == 0x0f0d && pid == 0x00ee)  // Hori PS4 Mini (PS4-099U)
+      || (vid == 0x1f4f && pid == 0x1002)  // ASW GG xrd controller
+      || (vid == 0x1532 && pid == 0x0401)  // Razer Arcade Stick [Panthera]
+      || (vid == 0x0738 && pid == 0x8180)  // Madcatz Fightstick Alpha PS4
+      || (vid == 0x33df && pid == 0x0011)  // Mayflash
+  );
+}
+
 static void process_sony_ds4(uint8_t const *report, uint16_t len,
                              JoyPort_t *joyPortState)
 {

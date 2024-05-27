@@ -36,7 +36,9 @@ extern "C"
   // 1 : print error
   // 2 : print warning
   // 3 : print info
-  // #define CFG_TUSB_DEBUG  3
+
+//  #undef CFG_TUSB_DEBUG
+//  #define CFG_TUSB_DEBUG  3
 
 #define CFG_TUH_XINPUT 1
 
