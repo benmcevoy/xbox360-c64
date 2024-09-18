@@ -52,10 +52,10 @@ void x360c64_device_identify(uint8_t dev_addr, uint8_t instance,
   tuh_vid_pid_get(dev_addr, &vid, &pid);
   printf("VID = %04x, PID = %04x\r\n", vid, pid);
 
-  if (is_mouse(vid, pid, dev_addr, instance, desc_report, desc_len)) {
-    context->Device = MOUSE;
-    return;
-  }
+  // if (is_mouse(vid, pid, dev_addr, instance, desc_report, desc_len)) {
+  //   context->Device = MOUSE;
+  //   return;
+  // }
 
   if (is_nintendo(vid, pid)) {
     context->Device = NINTENDO;

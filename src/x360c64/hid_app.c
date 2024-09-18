@@ -1,4 +1,4 @@
-#include "bsp/board_api.h"
+#include "bsp/board.h"
 #include "device.h"
 #include "tusb.h"
 #include "xinput_host.h"
@@ -46,15 +46,18 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance,
 // registers the XINPUT driver with tinyusb
 usbh_class_driver_t const *usbh_app_driver_get_cb(uint8_t *driver_count) {
   *driver_count = 1;
+
+  printf("XINPUT driver registered\r\n");
+
   return &usbh_xinput_driver;
 }
 
 void tuh_xinput_report_received_cb(uint8_t dev_addr, uint8_t instance,
                                    xinputh_interface_t const *xid_itf,
                                    uint16_t len) {
-  
-  // the general HID callback  tuh_xinput_mount_cb resets device to UNKNOWN because my code sucks
-  // there are two very different ways of identifying devices here...
+  // the general HID callback  tuh_xinput_mount_cb resets device to UNKNOWN
+  // because my code sucks there are two very different ways of identifying
+  // devices here...
   _context->Device = XBOX_360;
   // dodgy, but structs align xid_itf is basically my old xbox_report_t
   x360c64_device_get_report(dev_addr, instance, (uint8_t *)xid_itf, len,
@@ -63,8 +66,8 @@ void tuh_xinput_report_received_cb(uint8_t dev_addr, uint8_t instance,
   tuh_xinput_receive_report(dev_addr, instance);
 }
 
-void tuh_xinput_mount_cb(uint8_t dev_addr, uint8_t instance,
-                         const xinputh_interface_t *xinput_itf) {
+void tuh_xinput_mount_cb(uint8_t dev_addr, uint8_t instance, const xinputh_interface_t *xinput_itf)
+{
   TU_LOG1("XINPUT MOUNTED %02x %d\n", dev_addr, instance);
   // If this is a Xbox 360 Wireless controller we need to wait for a connection
   // packet on the in pipe before setting LEDs etc. So just start getting data
@@ -76,12 +79,16 @@ void tuh_xinput_mount_cb(uint8_t dev_addr, uint8_t instance,
   // tuh_xinput_set_led(dev_addr, instance, 0, true);
   // tuh_xinput_set_led(dev_addr, instance, 1, true);
   // tuh_xinput_set_rumble(dev_addr, instance, 0, 0, true);
+  
   tuh_xinput_receive_report(dev_addr, instance);
 
   _context->Device = XBOX_360;
+  _context->IsConnected = true;
 }
 
-void tuh_xinput_umount_cb(uint8_t dev_addr, uint8_t instance) {
+void tuh_xinput_umount_cb(uint8_t dev_addr, uint8_t instance)
+{
   TU_LOG1("XINPUT UNMOUNTED %02x %d\n", dev_addr, instance);
   _context->Device = UNKNOWN;
+  _context->IsConnected = false;
 }
