@@ -382,7 +382,7 @@ bool xinputh_xfer_cb(uint8_t dev_addr, uint8_t ep_addr, xfer_result_t result, ui
 
     if (dir == TUSB_DIR_IN)
     {
-        TU_LOG2("Get Report callback (%u, %u, %u bytes)\r\n", dev_addr, instance, xferred_bytes);
+        TU_LOG2("Get Report callback (%u, %u, %lu bytes)\r\n", dev_addr, instance, xferred_bytes);
         if (xid_itf->type == XBOX360_WIRED)
         {
             #define GET_USHORT(a) (uint16_t)((a)[1] << 8 | (a)[0])

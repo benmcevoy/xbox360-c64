@@ -2,21 +2,15 @@ set(projectName "x360c64")
 set(FAMILY rp2040)
 set(BOARD pico_sdk)
 set(TINYUSB_FAMILY_PROJECT_NAME_PREFIX "tinyusb_host_")
-#set(PICO_PIO_USB_PATH ${CMAKE_CURRENT_LIST_DIR}/pio_usb)
+
+include(${PICO_TINYUSB_PATH}/hw/mcu/raspberry_pi/Pico-PIO-USB/CMakeLists.txt)
 
 add_executable(${projectName})
-
-# pico_generate_pio_header(${projectName} ${PICO_PIO_USB_PATH}/usb_tx.pio)
-# pico_generate_pio_header(${projectName} ${PICO_PIO_USB_PATH}/usb_rx.pio)
 
 target_sources(${projectName} PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}/xinput_host.c
         ${CMAKE_CURRENT_LIST_DIR}/hid_app.c
         ${CMAKE_CURRENT_LIST_DIR}/main.c
-        # ${PICO_PIO_USB_PATH}/pio_usb.c
-        # ${PICO_PIO_USB_PATH}/pio_usb_device.c
-        # ${PICO_PIO_USB_PATH}/pio_usb_host.c
-        # ${PICO_PIO_USB_PATH}/usb_crc.c
         )
 
 # configure UART
@@ -35,6 +29,7 @@ target_include_directories(${projectName} PUBLIC
 # pull in common dependencies
 target_link_libraries(${projectName} PUBLIC 
         pico_stdlib
+        pico_pio_usb
         hardware_dma 
         hardware_pio
         tinyusb_host 

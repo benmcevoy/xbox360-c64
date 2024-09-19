@@ -37,24 +37,25 @@ extern "C"
   // 2 : print warning
   // 3 : print info
 
- #undef CFG_TUSB_DEBUG
- #define CFG_TUSB_DEBUG  1
+#undef CFG_TUSB_DEBUG
+#define CFG_TUSB_DEBUG  0
 
+// enable xbox support
 #define CFG_TUH_XINPUT 1
 
-  //--------------------------------------------------------------------+
-  // Board Specific Configuration
-  //--------------------------------------------------------------------+
-
+//--------------------------------------------------------------------+
+// Board Specific Configuration
+//--------------------------------------------------------------------+
 #if CFG_TUSB_MCU == OPT_MCU_RP2040
 // change to 1 if using pico-pio-usb as host controller for raspberry rp2040
+// I cannot get both ports (native and PIO) runnign as host simultaneously
+// might not be supported? hatahc of tinyusb says using two PIO ports it is possible
+// refer: https://github.com/hathach/tinyusb/issues/1673
+// but also refer: https://github.com/sekigon-gonnoc/Pico-PIO-USB/discussions/102
+// who says you can?
+
 #define CFG_TUH_RPI_PIO_USB 0
 #define BOARD_TUH_RHPORT CFG_TUH_RPI_PIO_USB
-#endif
-
-// RHPort number used for host can be defined by board.mk, default to port 0
-#ifndef BOARD_TUH_RHPORT
-#define BOARD_TUH_RHPORT 0
 #endif
 
 // RHPort max operational speed can defined by board.mk
@@ -73,10 +74,6 @@ extern "C"
 
 #ifndef CFG_TUSB_OS
 #define CFG_TUSB_OS OPT_OS_NONE
-#endif
-
-#ifndef CFG_TUSB_DEBUG
-#define CFG_TUSB_DEBUG 0
 #endif
 
 // Enable Host stack
@@ -108,11 +105,11 @@ extern "C"
 #define CFG_TUH_ENUMERATION_BUFSIZE 400
 
 #define CFG_TUH_HUB 1                        // number of supported hubs
-#define CFG_TUH_CDC 1                        // CDC ACM
-#define CFG_TUH_CDC_FTDI 1                   // FTDI Serial.  FTDI is not part of CDC class, only to re-use CDC driver API
-#define CFG_TUH_CDC_CP210X 1                 // CP210x Serial. CP210X is not part of CDC class, only to re-use CDC driver API
+#define CFG_TUH_CDC 0                        // CDC ACM
+#define CFG_TUH_CDC_FTDI 0                   // FTDI Serial.  FTDI is not part of CDC class, only to re-use CDC driver API
+#define CFG_TUH_CDC_CP210X 0                 // CP210x Serial. CP210X is not part of CDC class, only to re-use CDC driver API
 #define CFG_TUH_HID (3 * CFG_TUH_DEVICE_MAX) // typical keyboard + mouse device can have 3-4 HID interfaces
-#define CFG_TUH_MSC 1
+#define CFG_TUH_MSC 0
 #define CFG_TUH_VENDOR 0
 
 // max device support (excluding hub device): 1 hub typically has 4 ports

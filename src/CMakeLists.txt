@@ -15,7 +15,7 @@ endif()
 # Initialize the SDK
 pico_sdk_init()
 
-# Add Synth
+# add our project
 add_subdirectory(x360c64)
 
 add_compile_options(-Wall

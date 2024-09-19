@@ -43,6 +43,7 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance,
   }
 }
 
+#if (TUSB_OPT_HOST_ENABLED && CFG_TUH_XINPUT)
 // registers the XINPUT driver with tinyusb
 usbh_class_driver_t const *usbh_app_driver_get_cb(uint8_t *driver_count) {
   *driver_count = 1;
@@ -51,6 +52,7 @@ usbh_class_driver_t const *usbh_app_driver_get_cb(uint8_t *driver_count) {
 
   return &usbh_xinput_driver;
 }
+#endif
 
 void tuh_xinput_report_received_cb(uint8_t dev_addr, uint8_t instance,
                                    xinputh_interface_t const *xid_itf,
@@ -77,7 +79,8 @@ void tuh_xinput_mount_cb(uint8_t dev_addr, uint8_t instance, const xinputh_inter
     return;
   }
   // tuh_xinput_set_led(dev_addr, instance, 0, true);
-  // tuh_xinput_set_led(dev_addr, instance, 1, true);
+  // stops the light blinking on the controller adn sets the first led segment on
+  tuh_xinput_set_led(dev_addr, instance, 1, true);
   // tuh_xinput_set_rumble(dev_addr, instance, 0, 0, true);
   
   tuh_xinput_receive_report(dev_addr, instance);

@@ -6,8 +6,12 @@
 #include "devices/controllercontext.h"
 #include "hardware/clocks.h"
 #include "hardware/gpio.h"
+#include "pico/bootrom.h"
 #include "pico/stdlib.h"
+
+#include "pio_usb.h"
 #include "tusb.h"
+#include "host/usbh_pvt.h"
 
 extern void hid_app_init(JoyPort_t *);
 
@@ -17,11 +21,20 @@ static JoyPort_t *_context;
 static int hz = 2000;
 static repeating_timer_t _timer;
 
-static const uint GPIO_LEFT = 2;
-static const uint GPIO_FIRE = 3;
-static const uint GPIO_RIGHT = 4;
-static const uint GPIO_UP = 27;
-static const uint GPIO_DOWN = 28;
+#define GPIO_LEFT 2
+#define GPIO_FIRE 3
+#define GPIO_RIGHT 4
+#define GPIO_UP 27
+#define GPIO_DOWN 28
+
+#define DPAD_N 0
+#define DPAD_NE 1
+#define DPAD_E 2
+#define DPAD_SE 3
+#define DPAD_S 4
+#define DPAD_SW 5
+#define DPAD_W 6
+#define DPAD_NW 7
 
 static void debug_context() {
   if (_context->IsConnected == false) return;
@@ -53,17 +66,17 @@ bool sampler_callback(repeating_timer_t *rt) {
 
   debug_context();
 
-  // TODO: add in POT2?
-  bool isUp = (_context->dpad == 7) || (_context->dpad == 0) ||
-              (_context->dpad == 1) || _context->B ||
+  bool isUp = (_context->dpad == DPAD_NW) || (_context->dpad == DPAD_N) ||
+              (_context->dpad == DPAD_NE) || _context->B ||
               (_context->POT1_Y < THRESHOLD);
-  bool isDown = (_context->dpad == 3) || (_context->dpad == 4) ||
-                (_context->dpad == 5) || (_context->POT1_Y > (255 - THRESHOLD));
-  bool isRight = (_context->dpad == 1) || (_context->dpad == 2) ||
-                 (_context->dpad == 3) ||
+  bool isDown = (_context->dpad == DPAD_SE) || (_context->dpad == DPAD_S) ||
+                (_context->dpad == DPAD_SW) ||
+                (_context->POT1_Y > (255 - THRESHOLD));
+  bool isRight = (_context->dpad == 1) || (_context->dpad == DPAD_E) ||
+                 (_context->dpad == DPAD_SE) ||
                  (_context->POT1_X > (255 - THRESHOLD));
-  bool isLeft = (_context->dpad == 5) || (_context->dpad == 6) ||
-                (_context->dpad == 7) || (_context->POT1_X < THRESHOLD);
+  bool isLeft = (_context->dpad == DPAD_SW) || (_context->dpad == DPAD_W) ||
+                (_context->dpad == DPAD_NW) || (_context->POT1_X < THRESHOLD);
 
   gpio_put(GPIO_UP, isUp);
   gpio_put(GPIO_DOWN, isDown);
@@ -140,7 +153,7 @@ void gpio_joyport_init() {
 }
 
 int main(void) {
-  set_sys_clock_khz(120000, true);
+  set_sys_clock_khz(240000, true);
 
   stdio_init_all();
   printf("X360C64 started.\r\n");
@@ -149,10 +162,17 @@ int main(void) {
   gpio_joyport_init();
   context_init();
   board_init();
+
+  pio_usb_configuration_t pio_cfg = PIO_USB_DEFAULT_CONFIG;
+  tuh_configure(BOARD_TUH_RHPORT, TUH_CFGID_RPI_PIO_USB_CONFIGURATION, &pio_cfg);
   tuh_init(BOARD_TUH_RHPORT);
+
+  if (board_init_after_tusb) {
+    board_init_after_tusb();
+  }
+
   hid_app_init(_context);
   sampler_init();
-
 
   while (1) {
     tuh_task();
