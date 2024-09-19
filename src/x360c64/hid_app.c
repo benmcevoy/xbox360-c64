@@ -61,11 +61,14 @@ void tuh_xinput_report_received_cb(uint8_t dev_addr, uint8_t instance,
   // because my code sucks there are two very different ways of identifying
   // devices here...
   _context->Device = XBOX_360;
+  _context->IsConnected = true;
+
   // dodgy, but structs align xid_itf is basically my old xbox_report_t
   x360c64_device_get_report(dev_addr, instance, (uint8_t *)xid_itf, len,
                             _context);
 
   tuh_xinput_receive_report(dev_addr, instance);
+  tuh_xinput_set_led(dev_addr, instance, 1, true);
 }
 
 void tuh_xinput_mount_cb(uint8_t dev_addr, uint8_t instance, const xinputh_interface_t *xinput_itf)
@@ -78,15 +81,8 @@ void tuh_xinput_mount_cb(uint8_t dev_addr, uint8_t instance, const xinputh_inter
     tuh_xinput_receive_report(dev_addr, instance);
     return;
   }
-  // tuh_xinput_set_led(dev_addr, instance, 0, true);
-  // stops the light blinking on the controller adn sets the first led segment on
-  tuh_xinput_set_led(dev_addr, instance, 1, true);
-  // tuh_xinput_set_rumble(dev_addr, instance, 0, 0, true);
-  
-  tuh_xinput_receive_report(dev_addr, instance);
 
-  _context->Device = XBOX_360;
-  _context->IsConnected = true;
+  tuh_xinput_receive_report(dev_addr, instance);
 }
 
 void tuh_xinput_umount_cb(uint8_t dev_addr, uint8_t instance)
