@@ -14,6 +14,20 @@
 
 extern void hid_app_init(JoyPort_t *);
 
+#define X360_PIO_USB_CFG   \
+  {14,                     \
+   15,                     \
+   PIO_SM_USB_TX_DEFAULT,  \
+   PIO_USB_DMA_TX_DEFAULT, \
+   PIO_USB_RX_DEFAULT,     \
+   PIO_SM_USB_RX_DEFAULT,  \
+   PIO_SM_USB_EOP_DEFAULT, \
+   NULL,                   \
+   PIO_USB_DEBUG_PIN_NONE, \
+   PIO_USB_DEBUG_PIN_NONE, \
+   false,                  \
+   PIO_USB_PINOUT_DPDM}
+
 // this is global context
 static JoyPort_t *_context;
 
@@ -60,7 +74,7 @@ static void debug_context() {
 bool auto_firing() {
   // want about 8Hz
   const uint32_t autofire_interval_ms = 120;
-  static uint32_t autofire_start_ms = 0;
+  static uint32_t autofire_start_ms = 1000;
   static uint32_t autofire_duty_start_ms = 0;
   static uint32_t autofire_duty_ms = 20;
   static bool is_autofire_duty = false;
@@ -79,7 +93,7 @@ bool auto_firing() {
 
   is_autofire_duty = now - autofire_duty_start_ms < autofire_duty_ms;
 
-  return is_autofire_button_pressed && is_autofire_duty;
+  if (is_autofire_duty) return is_autofire_button_pressed && is_autofire_duty;
 }
 
 bool sampler_callback(repeating_timer_t *rt) {
@@ -87,24 +101,25 @@ bool sampler_callback(repeating_timer_t *rt) {
 
   debug_context();
 
-  bool isUp = (_context->dpad == DPAD_NW) || (_context->dpad == DPAD_N) ||
-              (_context->dpad == DPAD_NE) || _context->B ||
-              (_context->POT1_Y < THRESHOLD);
-  bool isDown = (_context->dpad == DPAD_SE) || (_context->dpad == DPAD_S) ||
-                (_context->dpad == DPAD_SW) ||
-                (_context->POT1_Y > (255 - THRESHOLD));
-  bool isRight = (_context->dpad == 1) || (_context->dpad == DPAD_E) ||
-                 (_context->dpad == DPAD_SE) ||
-                 (_context->POT1_X > (255 - THRESHOLD));
-  bool isLeft = (_context->dpad == DPAD_SW) || (_context->dpad == DPAD_W) ||
-                (_context->dpad == DPAD_NW) || (_context->POT1_X < THRESHOLD);
+  bool is_up = (_context->dpad == DPAD_NW) || (_context->dpad == DPAD_N) ||
+               (_context->dpad == DPAD_NE) || _context->B ||
+               (_context->POT1_Y < THRESHOLD);
+  bool is_down = (_context->dpad == DPAD_SE) || (_context->dpad == DPAD_S) ||
+                 (_context->dpad == DPAD_SW) ||
+                 (_context->POT1_Y > (255 - THRESHOLD));
+  bool is_right = (_context->dpad == DPAD_NE) || (_context->dpad == DPAD_E) ||
+                  (_context->dpad == DPAD_SE) ||
+                  (_context->POT1_X > (255 - THRESHOLD));
+  bool is_left = (_context->dpad == DPAD_SW) || (_context->dpad == DPAD_W) ||
+                 (_context->dpad == DPAD_NW) ||
+                 (_context->POT1_X < (THRESHOLD));
 
   bool is_auto_firing = auto_firing();
 
-  gpio_put(GPIO_UP, isUp);
-  gpio_put(GPIO_DOWN, isDown);
-  gpio_put(GPIO_LEFT, isLeft);
-  gpio_put(GPIO_RIGHT, isRight);
+  gpio_put(GPIO_UP, is_up);
+  gpio_put(GPIO_DOWN, is_down);
+  gpio_put(GPIO_LEFT, is_left);
+  gpio_put(GPIO_RIGHT, is_right);
   gpio_put(GPIO_FIRE, is_auto_firing || _context->A);
 
   return true;
@@ -135,6 +150,7 @@ void context_init() {
   _context->A = 0;
   _context->B = 0;
   _context->X = 0;
+  _context->Y = 0;
   _context->dpad = 8;  // 8 is released
   _context->POT1_X = 128;
   _context->POT1_Y = 128;
@@ -178,7 +194,7 @@ int main(void) {
   context_init();
   board_init();
 
-  pio_usb_configuration_t pio_cfg = PIO_USB_DEFAULT_CONFIG;
+  pio_usb_configuration_t pio_cfg = X360_PIO_USB_CFG;
   tuh_configure(BOARD_TUH_RHPORT, TUH_CFGID_RPI_PIO_USB_CONFIGURATION,
                 &pio_cfg);
   tuh_init(BOARD_TUH_RHPORT);
