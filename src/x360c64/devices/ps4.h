@@ -82,7 +82,7 @@ static void process_sony_ds4(uint8_t const *report, uint16_t len,
         sony_ds4_report_t deviceReport;
         memcpy(&deviceReport, report, sizeof(deviceReport));
 
-        joyPortState->dpad = deviceReport.dpad;
+        joyPortState->dpad = deviceReport.dpad >= 8 ? 8 : deviceReport.dpad;
         joyPortState->A = deviceReport.cross;
         joyPortState->B = deviceReport.circle;
         joyPortState->X = deviceReport.square;
